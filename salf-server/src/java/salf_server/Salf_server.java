@@ -7,9 +7,10 @@ package salf_server;
 
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
-import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
 import javax.ws.rs.core.MediaType;
@@ -30,7 +31,13 @@ public class Salf_server {
      */
     public Salf_server() {
     }
-
+    
+    @POST
+    @Path("/post")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public String recebe(String data) { 
+        return data+"server";
+    }
     /**
      * Retrieves representation of an instance of salf_server.Salf_server
      * @return an instance of java.lang.String
@@ -38,7 +45,7 @@ public class Salf_server {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public String getJson() {
-        return "[deuboua]";
+        return "Salf-Server";
     }
 
     /**
