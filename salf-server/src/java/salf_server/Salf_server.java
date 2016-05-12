@@ -19,6 +19,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
 import javax.ws.rs.core.MediaType;
 import modelos.Motivo;
+import static Control.Motivo.listarMotivo;
+import java.text.ParseException;
 
 /**
  * REST Web Service
@@ -54,12 +56,12 @@ public class Salf_server {
     public String getJson() {
         return "Salf-Server";
     }
-
-    @Path("/listaMotivos")
+    
     @GET
+    @Path("/listaMotivos")
     @Produces(MediaType.APPLICATION_JSON)
-    public String listaMotivos() {
-        Motivo motivo = new Motivo(1, "teste");
+    public String listaMotivos() throws ParseException {
+        /*Motivo motivo = new Motivo(1, "teste");
         List<Motivo> lista = new ArrayList<Motivo>();
         lista.add(motivo);
         
@@ -68,7 +70,9 @@ public class Salf_server {
         
         System.out.println("json: " + json);
 
-        return json;
+        return json;*/
+        String temp = listarMotivo();
+        return temp;
     }
 
     /**
