@@ -46,4 +46,24 @@ public class MotivoModel {
         
         return lista;
     }
+    
+    public static void excluiMotivo(MotivoValue motivo) {
+        String sql = "delete from motivo\n"
+                + "    where id_motivo = " + motivo.getId_motivo() + "\n";
+
+        try {
+            //Registra o driver
+            Class.forName("org.postgresql.Driver");
+            //Solicita uma conexao
+            Connection conn;
+            conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/salf", "postgres", "postgres");
+
+            //Executa a query
+            java.sql.Statement st = conn.createStatement();
+            st.executeUpdate(sql);
+        } catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(MotivoModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
 }

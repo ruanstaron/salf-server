@@ -6,8 +6,7 @@
 package salf_server;
 
 import Control.MotivoControl;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
+import java.io.IOException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Produces;
@@ -59,6 +58,13 @@ public class Salf_server {
     @Produces(MediaType.APPLICATION_JSON)
     public String listaMotivos() throws ParseException {
         return MotivoControl.listarMotivo();
+    }
+
+    @POST
+    @Path("/excluiMotivo")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void excluiMotivo(String data) throws ParseException, IOException {
+        MotivoControl.excluirMotivo(data);
     }
 
     /**
