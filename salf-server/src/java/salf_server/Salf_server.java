@@ -5,10 +5,9 @@
  */
 package salf_server;
 
+import Control.MotivoControl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
-import java.util.ArrayList;
-import java.util.List;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Produces;
@@ -18,8 +17,6 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
 import javax.ws.rs.core.MediaType;
-import modelos.Motivo;
-import static Control.Motivo.listarMotivo;
 import java.text.ParseException;
 
 /**
@@ -56,23 +53,12 @@ public class Salf_server {
     public String getJson() {
         return "Salf-Server";
     }
-    
+
     @GET
     @Path("/listaMotivos")
     @Produces(MediaType.APPLICATION_JSON)
     public String listaMotivos() throws ParseException {
-        /*Motivo motivo = new Motivo(1, "teste");
-        List<Motivo> lista = new ArrayList<Motivo>();
-        lista.add(motivo);
-        
-        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-        String json = ow.writeValueAsString(lista);
-        
-        System.out.println("json: " + json);
-
-        return json;*/
-        String temp = listarMotivo();
-        return temp;
+        return MotivoControl.listarMotivo();
     }
 
     /**

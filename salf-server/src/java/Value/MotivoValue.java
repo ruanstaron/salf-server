@@ -1,14 +1,14 @@
-package modelos;
+package Value;
 
 /**
  * @author cristhian
  */
-public class Motivo {
+public class MotivoValue {
     
     private int id_motivo;
     private String descricao;
     
-    public Motivo(int id_motivo, String descricao) {
+    public MotivoValue(int id_motivo, String descricao) {
         this.id_motivo = id_motivo;
         this.descricao = descricao;
     }
