@@ -6,13 +6,10 @@ import java.sql.SQLException;
  
 public class ConnectionFactory {
 
-    ConnectionFactory(String jdbcpostgresqllocalhost5432salf, String postgres, String string) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    public Connection getConnection() {
+    public static Connection getConnection() {
         try {
             return DriverManager.getConnection(
-          "jdbc:postgresql://localhost:5432/salf", "postgres", "");
+          "jdbc:postgresql://localhost:5432/salf", "postgres", "postgres");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

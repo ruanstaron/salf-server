@@ -2,7 +2,6 @@ package Model;
 
 import Value.MotivoValue;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -26,8 +25,7 @@ public class MotivoModel {
             //Registra o driver
             Class.forName("org.postgresql.Driver");
             //Solicita uma conexao
-            Connection conn;
-            conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/salf", "postgres", "postgres");
+            Connection conn = ConnectionFactory.getConnection();
 
             //Executa a query
             java.sql.Statement st = conn.createStatement();
@@ -55,8 +53,7 @@ public class MotivoModel {
             //Registra o driver
             Class.forName("org.postgresql.Driver");
             //Solicita uma conexao
-            Connection conn;
-            conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/salf", "postgres", "postgres");
+            Connection conn = ConnectionFactory.getConnection();
 
             //Executa a query
             java.sql.Statement st = conn.createStatement();
