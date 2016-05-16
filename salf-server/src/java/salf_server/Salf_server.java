@@ -6,6 +6,7 @@
 package salf_server;
 
 import Control.MotivoControl;
+import Control.SalaControl;
 import java.io.IOException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
@@ -79,6 +80,34 @@ public class Salf_server {
     @Consumes(MediaType.APPLICATION_JSON)
     public void cadastraMotivo(String data) throws ParseException, IOException {
         MotivoControl.cadastraMotivo(data);
+    }
+
+    @GET
+    @Path("/listaSalas")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String listaSalas() throws ParseException {
+        return SalaControl.listarSala();
+    }
+
+    @POST
+    @Path("/excluiSala")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void excluiSala(String data) throws ParseException, IOException {
+        SalaControl.excluirSala(data);
+    }
+
+    @POST
+    @Path("/alteraSala")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void alteraSala(String data) throws ParseException, IOException {
+        SalaControl.alteraSala(data);
+    }
+
+    @POST
+    @Path("/cadastraSala")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void cadastraSala(String data) throws ParseException, IOException {
+        SalaControl.cadastraSala(data);
     }
 
     /**
