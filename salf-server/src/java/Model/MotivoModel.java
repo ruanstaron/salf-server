@@ -14,9 +14,11 @@ import java.util.logging.Logger;
 public class MotivoModel {
 
     public static ArrayList<MotivoValue> listaMotivo() {
-        String sql = "select *\n"
-                + "     from motivo\n"
-                + "    where incidencia = '0'\n";
+        String sql = "select m.*\n"
+                + "     from motivo m\n"
+                + "    where m.incidencia is null\n"
+                + "    order by m.id_motivo\n";
+        System.out.println("Sql de lista: " + sql);
         
         ArrayList<MotivoValue> lista = new ArrayList<>();
         MotivoValue motivo;
@@ -45,10 +47,9 @@ public class MotivoModel {
         return lista;
     }
     
-    public static void excluiMotivo(MotivoValue motivo) {
-        String sql = "delete from motivo\n"
-                + "    where id_motivo = " + motivo.getId_motivo() + "\n";
-
+    public static void executaUpdate(String sql) {
+        System.out.println("Sql de update: " + sql);
+        
         try {
             //Registra o driver
             Class.forName("org.postgresql.Driver");

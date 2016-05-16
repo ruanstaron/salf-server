@@ -67,6 +67,20 @@ public class Salf_server {
         MotivoControl.excluirMotivo(data);
     }
 
+    @POST
+    @Path("/alteraMotivo")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void alteraMotivo(String data) throws ParseException, IOException {
+        MotivoControl.alteraMotivo(data);
+    }
+
+    @POST
+    @Path("/cadastraMotivo")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void cadastraMotivo(String data) throws ParseException, IOException {
+        MotivoControl.cadastraMotivo(data);
+    }
+
     /**
      * PUT method for updating or creating an instance of Salf_server
      *
