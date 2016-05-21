@@ -1,8 +1,11 @@
 package salf_server;
 
+import Control.LoginControl;
 import Control.MotivoControl;
 import Control.SalaControl;
+import com.nimbusds.jose.JOSEException;
 import java.io.IOException;
+import java.sql.SQLException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Produces;
@@ -35,10 +38,17 @@ public class Salf_server {
     }
 
     @POST
-    @Path("/post")
+    @Path("/login")
     @Consumes(MediaType.APPLICATION_JSON)
-    public String recebe(String data) {
-        return data + "server";
+    public String efetuaLogin(String data) throws IOException, SQLException, JOSEException {
+        if(LoginControl.realizaLogin(data)){
+            Token token = new Token();
+            String s = token.geraToken(LoginControl.getId_usuario(data));
+            return LoginControl.geraLogin(s);
+        }
+        else{
+            return null;
+        }
     }
 
     /**
