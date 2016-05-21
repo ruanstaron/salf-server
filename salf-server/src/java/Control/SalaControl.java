@@ -2,7 +2,6 @@ package Control;
 
 import Model.SalaModel;
 import Value.SalaValue;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import java.io.IOException;
@@ -14,54 +13,37 @@ import java.util.ArrayList;
  */
 public class SalaControl {
 
-    public static String listarSala() throws ParseException {
-        ArrayList<SalaValue> salas = SalaModel.listaSala();
+    public static String listarSala(int id) throws ParseException, IOException {
+        SalaValue sala = new SalaValue(id, null);
+        ArrayList<SalaValue> salas = SalaModel.listaSala(sala);
 
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-        String json = ow.writeValueAsString(salas);
+        String salasJson = ow.writeValueAsString(salas);
 
-        return json;
+        return salasJson;
     }
 
     public static void excluirSala(String json) throws ParseException, IOException {
-        ObjectMapper om = new ObjectMapper();
-        JsonNode node = om.readValue(json, JsonNode.class);
-
-        SalaValue sala = new SalaValue(
-                node.get("id_sala").asInt(),
-                null
-        );
-
+        SalaValue sala = new SalaValue(json);
+        
         SalaModel.executaUpdate(
                 "  delete from sala s\n"
-                + " where s.id_sala = " + sala.getId_sala() + "\n"
+                + " where s.id_sala = " + sala.getId() + "\n"
         );
     }
 
     public static void alteraSala(String json) throws ParseException, IOException {
-        ObjectMapper om = new ObjectMapper();
-        JsonNode node = om.readValue(json, JsonNode.class);
-
-        SalaValue sala = new SalaValue(
-                node.get("id_sala").asInt(),
-                node.get("descricao").asText()
-        );
+        SalaValue sala = new SalaValue(json);
 
         SalaModel.executaUpdate(
                 "  update sala\n"
                 + "   set descricao = '" + sala.getDescricao() + "'\n"
-                + " where id_sala = " + sala.getId_sala() + "\n"
+                + " where id_sala = " + sala.getId() + "\n"
         );
     }
 
     public static void cadastraSala(String json) throws ParseException, IOException {
-        ObjectMapper om = new ObjectMapper();
-        JsonNode node = om.readValue(json, JsonNode.class);
-
-        SalaValue sala = new SalaValue(
-                -1,
-                node.get("descricao").asText()
-        );
+        SalaValue sala = new SalaValue(json);
 
         SalaModel.executaUpdate(
                 "  insert into sala\n"

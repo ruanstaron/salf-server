@@ -1,6 +1,5 @@
 package Model;
 
-import Value.MotivoValue;
 import Value.SalaValue;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -14,14 +13,17 @@ import java.util.logging.Logger;
  */
 public class SalaModel {
 
-    public static ArrayList<SalaValue> listaSala() {
+    public static ArrayList<SalaValue> listaSala(SalaValue sala) {
         String sql = "select s.*\n"
-                + "     from sala s\n"
-                + "    order by s.id_sala\n";
+                + "     from sala s\n";
+        if (sala.getId() != -1) {
+            sql += "   where s.id_sala = " + sala.getId() + "\n";
+        }
+        sql += "       order by s.id_sala\n";
         System.out.println("Sql de lista: " + sql);
-        
+
         ArrayList<SalaValue> lista = new ArrayList<>();
-        SalaValue sala;
+        SalaValue salaAux;
 
         try {
             //Registra o driver
@@ -34,22 +36,22 @@ public class SalaModel {
             st.executeQuery(sql);
             ResultSet rs = st.getResultSet();
             while (rs.next()) {
-                sala = new SalaValue(
+                salaAux = new SalaValue(
                         rs.getInt("id_sala"),
                         rs.getString("descricao")
                 );
-                lista.add(sala);
+                lista.add(salaAux);
             }
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(MotivoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         return lista;
     }
-    
+
     public static void executaUpdate(String sql) {
         System.out.println("Sql de update: " + sql);
-        
+
         try {
             //Registra o driver
             Class.forName("org.postgresql.Driver");
@@ -63,5 +65,5 @@ public class SalaModel {
             Logger.getLogger(MotivoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
 }

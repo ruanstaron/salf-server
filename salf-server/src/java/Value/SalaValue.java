@@ -1,29 +1,58 @@
 package Value;
 
+import Util.Util;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 /**
  * @author cristhian
  */
 public class SalaValue {
-    
-    private int id_sala;
+
+    private int id;
     private String descricao;
-    
-    public SalaValue(int id_sala, String descricao) {
-        this.id_sala = id_sala;
+
+    public SalaValue() {
+        this.id = -1;
+        this.descricao = null;
+    }
+
+    public SalaValue(int id, String descricao) {
+        this.id = id;
         this.descricao = descricao;
     }
-    
+
+    public SalaValue(String json) {
+        System.out.println("json " + json);
+        this.id = -1;
+        this.descricao = null;
+        
+        try {
+            ObjectMapper om = new ObjectMapper();
+            JsonNode node = om.readValue(json, JsonNode.class);
+
+            if (node.has(Util.PAR_ID)) {
+                this.id = node.get(Util.PAR_ID).asInt();
+            }
+            if (node.has(Util.PAR_DESCRICAO)) {
+                this.descricao = node.get(Util.PAR_DESCRICAO).asText();
+            }
+        } catch (Exception e) {
+            System.out.println("Exceção: " + e);
+        }
+    }
+
     @Override
     public String toString() {
-        return "Sala [id_sala=" + id_sala + ", descricao=" + descricao + "]";
+        return "Sala [id=" + id + ", descricao=" + descricao + "]";
     }
 
-    public int getId_sala() {
-        return id_sala;
+    public int getId() {
+        return id;
     }
 
-    public void setId_sala(int id_sala) {
-        this.id_sala = id_sala;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getDescricao() {
@@ -33,5 +62,5 @@ public class SalaValue {
     public void setDescricao(String descricao) {
         this.descricao = descricao;
     }
-    
+
 }
