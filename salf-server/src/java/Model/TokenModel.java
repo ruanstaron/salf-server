@@ -18,7 +18,10 @@ import java.util.logging.Logger;
 public class TokenModel {
     
     public static void cadastraToken(int id, String chave) throws SQLException {
-        String sql = "UPDATE usuario SET chave="+chave+" WHERE id_usuario="+id+";";
+        String sql = "UPDATE usuario\n" +
+                "        SET chave = '" + chave + "'\n" +
+                "      WHERE id_usuario = " + id + "\n";
+        System.out.println("SQL de cadastro de token: " + sql);
         
         try {
             //Registra o driver

@@ -16,7 +16,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
 import javax.ws.rs.core.MediaType;
 import java.text.ParseException;
-import javax.ws.rs.DELETE;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.QueryParam;
 
@@ -62,34 +61,40 @@ public class Salf_server {
         return "Salf-Server";
     }
 
+    // ------- ------------ - ------
+    // MÉTODOS RELACIONADOS A MOTIVO
+    // ------- ------------ - ------
     @GET
-    @Path("/listaMotivos")
+    @Path("/motivoListar")
     @Produces(MediaType.APPLICATION_JSON)
-    public String listaMotivos() throws ParseException {
-        return MotivoControl.listarMotivo();
+    public String listaMotivos(@DefaultValue("-1") @QueryParam("id") int id) throws ParseException {
+        return MotivoControl.listarMotivo(id);
     }
 
     @POST
-    @Path("/excluiMotivo")
+    @Path("/motivoDeletar")
     @Consumes(MediaType.APPLICATION_JSON)
     public void excluiMotivo(String data) throws ParseException, IOException {
         MotivoControl.excluirMotivo(data);
     }
 
     @POST
-    @Path("/alteraMotivo")
+    @Path("/motivoAlterar")
     @Consumes(MediaType.APPLICATION_JSON)
     public void alteraMotivo(String data) throws ParseException, IOException {
         MotivoControl.alteraMotivo(data);
     }
 
     @POST
-    @Path("/motivo")
+    @Path("/motivoCadastrar")
     @Consumes(MediaType.APPLICATION_JSON)
     public void cadastraMotivo(String data) throws ParseException, IOException {
         MotivoControl.cadastraMotivo(data);
     }
 
+    // ------- ------------ - ----
+    // MÉTODOS RELACIONADOS A SALA
+    // ------- ------------ - ----
     @GET
     @Path("/salaListar")
     @Produces(MediaType.APPLICATION_JSON)

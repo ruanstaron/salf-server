@@ -8,62 +8,47 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import static javax.ws.rs.client.Entity.json;
 
 /**
  * @author Planejamento
  */
 public class MotivoControl {
 
-    public static String listarMotivo() throws ParseException {
-        ArrayList<MotivoValue> motivos = MotivoModel.listaMotivo();
+    public static String listarMotivo(int id) throws ParseException {
+        MotivoValue motivo = new MotivoValue(id, null);
+        ArrayList<MotivoValue> motivos = MotivoModel.listaMotivo(motivo);
 
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-        String json = ow.writeValueAsString(motivos);
+        String motivosJson = ow.writeValueAsString(motivos);
 
-        return json;
+        System.out.println("retorno: " + motivosJson);
+        return motivosJson;
     }
 
     public static void excluirMotivo(String json) throws ParseException, IOException {
-        ObjectMapper om = new ObjectMapper();
-        JsonNode node = om.readValue(json, JsonNode.class);
-
-        MotivoValue motivo = new MotivoValue(
-                node.get("id_motivo").asInt(),
-                null
-        );
+        MotivoValue motivo = new MotivoValue(json);
 
         MotivoModel.executaUpdate(
                 "  delete from motivo m\n"
-                + " where m.id_motivo = " + motivo.getId_motivo() + "\n"
+                + " where m.id_motivo = " + motivo.getId() + "\n"
                 + "   and m.incidencia is null\n"
         );
     }
 
     public static void alteraMotivo(String json) throws ParseException, IOException {
-        ObjectMapper om = new ObjectMapper();
-        JsonNode node = om.readValue(json, JsonNode.class);
-
-        MotivoValue motivo = new MotivoValue(
-                node.get("id_motivo").asInt(),
-                node.get("descricao").asText()
-        );
+        MotivoValue motivo = new MotivoValue(json);
 
         MotivoModel.executaUpdate(
                 "  update motivo\n"
                 + "   set descricao = '" + motivo.getDescricao() + "'\n"
-                + " where id_motivo = " + motivo.getId_motivo() + "\n"
+                + " where id_motivo = " + motivo.getId() + "\n"
                 + "   and incidencia is null\n"
         );
     }
 
     public static void cadastraMotivo(String json) throws ParseException, IOException {
-        ObjectMapper om = new ObjectMapper();
-        JsonNode node = om.readValue(json, JsonNode.class);
-
-        MotivoValue motivo = new MotivoValue(
-                -1,
-                node.get("descricao").asText()
-        );
+        MotivoValue motivo = new MotivoValue(json);
 
         MotivoModel.executaUpdate(
                 "  insert into motivo\n"

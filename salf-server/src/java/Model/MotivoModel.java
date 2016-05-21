@@ -13,15 +13,18 @@ import java.util.logging.Logger;
  */
 public class MotivoModel {
 
-    public static ArrayList<MotivoValue> listaMotivo() {
+    public static ArrayList<MotivoValue> listaMotivo(MotivoValue motivo) {
         String sql = "select m.*\n"
                 + "     from motivo m\n"
-                + "    where m.incidencia is null\n"
-                + "    order by m.id_motivo\n";
+                + "    where m.incidencia is null\n";
+        if(motivo.getId() != -1) {
+            sql += "     and m.motivo_id = " + motivo.getId() + "\n";
+        }
+        sql += "       order by m.id_motivo\n";
         System.out.println("Sql de lista: " + sql);
         
         ArrayList<MotivoValue> lista = new ArrayList<>();
-        MotivoValue motivo;
+        MotivoValue motivoAux;
 
         try {
             //Registra o driver
@@ -34,11 +37,11 @@ public class MotivoModel {
             st.executeQuery(sql);
             ResultSet rs = st.getResultSet();
             while (rs.next()) {
-                motivo = new MotivoValue(
+                motivoAux = new MotivoValue(
                         rs.getInt("id_motivo"),
                         rs.getString("descricao")
                 );
-                lista.add(motivo);
+                lista.add(motivoAux);
             }
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(MotivoModel.class.getName()).log(Level.SEVERE, null, ex);
