@@ -2,31 +2,28 @@ package Control;
 
 import Model.MotivoModel;
 import Value.MotivoValue;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
-import static javax.ws.rs.client.Entity.json;
 
 /**
  * @author Planejamento
  */
 public class MotivoControl {
 
-    public static String listarMotivo(int id) throws ParseException {
+    public static String listar(int id) throws ParseException {
         MotivoValue motivo = new MotivoValue(id, null);
-        ArrayList<MotivoValue> motivos = MotivoModel.listaMotivo(motivo);
+        ArrayList<MotivoValue> motivos = MotivoModel.lista(motivo);
 
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
         String motivosJson = ow.writeValueAsString(motivos);
 
-        System.out.println("retorno: " + motivosJson);
         return motivosJson;
     }
 
-    public static void excluirMotivo(String json) throws ParseException, IOException {
+    public static void excluir(String json) throws ParseException, IOException {
         MotivoValue motivo = new MotivoValue(json);
 
         MotivoModel.executaUpdate(
@@ -36,7 +33,7 @@ public class MotivoControl {
         );
     }
 
-    public static void alteraMotivo(String json) throws ParseException, IOException {
+    public static void altera(String json) throws ParseException, IOException {
         MotivoValue motivo = new MotivoValue(json);
 
         MotivoModel.executaUpdate(
@@ -47,7 +44,7 @@ public class MotivoControl {
         );
     }
 
-    public static void cadastraMotivo(String json) throws ParseException, IOException {
+    public static void cadastra(String json) throws ParseException, IOException {
         MotivoValue motivo = new MotivoValue(json);
 
         MotivoModel.executaUpdate(

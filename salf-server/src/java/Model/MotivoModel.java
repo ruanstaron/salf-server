@@ -13,7 +13,7 @@ import java.util.logging.Logger;
  */
 public class MotivoModel {
 
-    public static ArrayList<MotivoValue> listaMotivo(MotivoValue motivo) {
+    public static ArrayList<MotivoValue> lista(MotivoValue motivo) {
         String sql = "select m.*\n"
                 + "     from motivo m\n"
                 + "    where m.incidencia is null\n";
@@ -21,7 +21,7 @@ public class MotivoModel {
             sql += "     and m.motivo_id = " + motivo.getId() + "\n";
         }
         sql += "       order by m.id_motivo\n";
-        System.out.println("Sql de lista: " + sql);
+        System.out.println("Sql de lista: \n" + sql);
         
         ArrayList<MotivoValue> lista = new ArrayList<>();
         MotivoValue motivoAux;
@@ -51,7 +51,7 @@ public class MotivoModel {
     }
     
     public static void executaUpdate(String sql) {
-        System.out.println("Sql de update: " + sql);
+        System.out.println("Sql de update: \n" + sql);
         
         try {
             //Registra o driver

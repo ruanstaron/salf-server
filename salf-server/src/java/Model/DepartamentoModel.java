@@ -1,6 +1,6 @@
 package Model;
 
-import Value.SalaValue;
+import Value.DepartamentoValue;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -11,19 +11,19 @@ import java.util.logging.Logger;
 /**
  * @author cristhian
  */
-public class SalaModel {
+public class DepartamentoModel {
 
-    public static ArrayList<SalaValue> lista(SalaValue sala) {
-        String sql = "select s.*\n"
-                + "     from sala s\n";
-        if (sala.getId() != -1) {
-            sql += "   where s.id_sala = " + sala.getId() + "\n";
+    public static ArrayList<DepartamentoValue> lista(DepartamentoValue departamento) {
+        String sql = "select d.*\n"
+                + "     from departamento d\n";
+        if (departamento.getId() != -1) {
+            sql += "   where d.id_departamento = " + departamento.getId() + "\n";
         }
-        sql += "       order by s.id_sala\n";
+        sql += "       order by d.id_departamento\n";
         System.out.println("Sql de lista: \n" + sql);
 
-        ArrayList<SalaValue> lista = new ArrayList<>();
-        SalaValue salaAux;
+        ArrayList<DepartamentoValue> lista = new ArrayList<>();
+        DepartamentoValue departamentoAux;
 
         try {
             //Registra o driver
@@ -36,11 +36,11 @@ public class SalaModel {
             st.executeQuery(sql);
             ResultSet rs = st.getResultSet();
             while (rs.next()) {
-                salaAux = new SalaValue(
-                        rs.getInt("id_sala"),
+                departamentoAux = new DepartamentoValue(
+                        rs.getInt("id_departamento"),
                         rs.getString("descricao")
                 );
-                lista.add(salaAux);
+                lista.add(departamentoAux);
             }
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(MotivoModel.class.getName()).log(Level.SEVERE, null, ex);

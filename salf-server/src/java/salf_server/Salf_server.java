@@ -1,5 +1,6 @@
 package salf_server;
 
+import Control.DepartamentoControl;
 import Control.LoginControl;
 import Control.MotivoControl;
 import Control.SalaControl;
@@ -68,28 +69,28 @@ public class Salf_server {
     @Path("/motivoListar")
     @Produces(MediaType.APPLICATION_JSON)
     public String listaMotivos(@DefaultValue("-1") @QueryParam("id") int id) throws ParseException {
-        return MotivoControl.listarMotivo(id);
+        return MotivoControl.listar(id);
     }
 
     @POST
     @Path("/motivoDeletar")
     @Consumes(MediaType.APPLICATION_JSON)
     public void excluiMotivo(String data) throws ParseException, IOException {
-        MotivoControl.excluirMotivo(data);
+        MotivoControl.excluir(data);
     }
 
     @POST
     @Path("/motivoAlterar")
     @Consumes(MediaType.APPLICATION_JSON)
     public void alteraMotivo(String data) throws ParseException, IOException {
-        MotivoControl.alteraMotivo(data);
+        MotivoControl.altera(data);
     }
 
     @POST
     @Path("/motivoCadastrar")
     @Consumes(MediaType.APPLICATION_JSON)
     public void cadastraMotivo(String data) throws ParseException, IOException {
-        MotivoControl.cadastraMotivo(data);
+        MotivoControl.cadastra(data);
     }
 
     // ------- ------------ - ----
@@ -99,28 +100,59 @@ public class Salf_server {
     @Path("/salaListar")
     @Produces(MediaType.APPLICATION_JSON)
     public String listaSalas(@DefaultValue("-1") @QueryParam("id") int id) throws ParseException, IOException {
-        return SalaControl.listarSala(id);
+        return SalaControl.listar(id);
     }
 
     @POST
     @Path("/salaDeletar")
     @Consumes(MediaType.APPLICATION_JSON)
     public void excluiSala(String json) throws ParseException, IOException {
-        SalaControl.excluirSala(json);
+        SalaControl.excluir(json);
     }
 
     @POST
     @Path("/salaCadastrar")
     @Consumes(MediaType.APPLICATION_JSON)
     public void cadastraSala(String json) throws ParseException, IOException {
-        SalaControl.cadastraSala(json);
+        SalaControl.cadastra(json);
     }
 
     @POST
     @Path("/salaAlterar")
     @Consumes(MediaType.APPLICATION_JSON)
     public void alteraSala(String json) throws ParseException, IOException {
-        SalaControl.alteraSala(json);
+        SalaControl.altera(json);
+    }
+
+    // ------- ------------ - ------------
+    // MÉTODOS RELACIONADOS A DEPARTAMENTO
+    // ------- ------------ - ------------
+    @GET
+    @Path("/departamentoListar")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String listaDepartamentos(@DefaultValue("-1") @QueryParam("id") int id) throws ParseException, IOException {
+        return DepartamentoControl.listar(id);
+    }
+
+    @POST
+    @Path("/departamentoDeletar")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void excluiDepartamento(String json) throws ParseException, IOException {
+        DepartamentoControl.excluir(json);
+    }
+
+    @POST
+    @Path("/departamentoCadastrar")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void cadastraDepartamento(String json) throws ParseException, IOException {
+        DepartamentoControl.cadastra(json);
+    }
+
+    @POST
+    @Path("/departamentoAlterar")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void alteraDepartamento(String json) throws ParseException, IOException {
+        DepartamentoControl.altera(json);
     }
 
     /**

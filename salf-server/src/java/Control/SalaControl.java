@@ -13,9 +13,9 @@ import java.util.ArrayList;
  */
 public class SalaControl {
 
-    public static String listarSala(int id) throws ParseException, IOException {
+    public static String listar(int id) throws ParseException, IOException {
         SalaValue sala = new SalaValue(id, null);
-        ArrayList<SalaValue> salas = SalaModel.listaSala(sala);
+        ArrayList<SalaValue> salas = SalaModel.lista(sala);
 
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
         String salasJson = ow.writeValueAsString(salas);
@@ -23,7 +23,7 @@ public class SalaControl {
         return salasJson;
     }
 
-    public static void excluirSala(String json) throws ParseException, IOException {
+    public static void excluir(String json) throws ParseException, IOException {
         SalaValue sala = new SalaValue(json);
         
         SalaModel.executaUpdate(
@@ -32,7 +32,7 @@ public class SalaControl {
         );
     }
 
-    public static void alteraSala(String json) throws ParseException, IOException {
+    public static void altera(String json) throws ParseException, IOException {
         SalaValue sala = new SalaValue(json);
 
         SalaModel.executaUpdate(
@@ -42,7 +42,7 @@ public class SalaControl {
         );
     }
 
-    public static void cadastraSala(String json) throws ParseException, IOException {
+    public static void cadastra(String json) throws ParseException, IOException {
         SalaValue sala = new SalaValue(json);
 
         SalaModel.executaUpdate(
