@@ -18,7 +18,7 @@ public class MotivoModel {
                 + "     from motivo m\n"
                 + "    where m.incidencia is null\n";
         if(motivo.getId() != -1) {
-            sql += "     and m.motivo_id = " + motivo.getId() + "\n";
+            sql += "     and m.id_motivo = " + motivo.getId() + "\n";
         }
         sql += "       order by m.id_motivo\n";
         System.out.println("Sql de lista: \n" + sql);

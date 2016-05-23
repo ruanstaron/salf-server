@@ -23,8 +23,8 @@ public class DepartamentoControl {
         return departamentosJson;
     }
 
-    public static void excluir(String json) throws ParseException, IOException {
-        DepartamentoValue departamento = new DepartamentoValue(json);
+    public static void excluir(int id) throws ParseException, IOException {
+        DepartamentoValue departamento = new DepartamentoValue(id, null);
         
         DepartamentoModel.executaUpdate(
                 "  delete from departamento d\n"
@@ -32,8 +32,9 @@ public class DepartamentoControl {
         );
     }
 
-    public static void altera(String json) throws ParseException, IOException {
+    public static void altera(int id, String json) throws ParseException, IOException {
         DepartamentoValue departamento = new DepartamentoValue(json);
+        departamento.setId(id);
 
         DepartamentoModel.executaUpdate(
                 "  update departamento\n"

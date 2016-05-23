@@ -23,8 +23,8 @@ public class MotivoControl {
         return motivosJson;
     }
 
-    public static void excluir(String json) throws ParseException, IOException {
-        MotivoValue motivo = new MotivoValue(json);
+    public static void excluir(int id) throws ParseException, IOException {
+        MotivoValue motivo = new MotivoValue(id, null);
 
         MotivoModel.executaUpdate(
                 "  delete from motivo m\n"
@@ -33,8 +33,9 @@ public class MotivoControl {
         );
     }
 
-    public static void altera(String json) throws ParseException, IOException {
+    public static void altera(int id, String json) throws ParseException, IOException {
         MotivoValue motivo = new MotivoValue(json);
+        motivo.setId(id);
 
         MotivoModel.executaUpdate(
                 "  update motivo\n"

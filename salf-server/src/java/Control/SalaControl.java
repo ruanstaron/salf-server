@@ -23,8 +23,8 @@ public class SalaControl {
         return salasJson;
     }
 
-    public static void excluir(String json) throws ParseException, IOException {
-        SalaValue sala = new SalaValue(json);
+    public static void excluir(int id) throws ParseException, IOException {
+        SalaValue sala = new SalaValue(id, null);
         
         SalaModel.executaUpdate(
                 "  delete from sala s\n"
@@ -32,8 +32,9 @@ public class SalaControl {
         );
     }
 
-    public static void altera(String json) throws ParseException, IOException {
+    public static void altera(int id, String json) throws ParseException, IOException {
         SalaValue sala = new SalaValue(json);
+        sala.setId(id);
 
         SalaModel.executaUpdate(
                 "  update sala\n"

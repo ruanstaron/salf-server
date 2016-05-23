@@ -17,7 +17,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
 import javax.ws.rs.core.MediaType;
 import java.text.ParseException;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.DefaultValue;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 
 /**
@@ -66,28 +68,34 @@ public class Salf_server {
     // MÉTODOS RELACIONADOS A MOTIVO
     // ------- ------------ - ------
     @GET
-    @Path("/motivoListar")
+    @Path("/motivo")
     @Produces(MediaType.APPLICATION_JSON)
-    public String listaMotivos(@DefaultValue("-1") @QueryParam("id") int id) throws ParseException {
+    public String listaMotivos() throws ParseException {
+        return MotivoControl.listar(-1);
+    }
+    
+    @GET
+    @Path("/motivo/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String listaMotivos(@PathParam("id") int id) throws ParseException {
         return MotivoControl.listar(id);
     }
 
-    @POST
-    @Path("/motivoDeletar")
+    @DELETE
+    @Path("/motivo/{id}")
+    public void excluiMotivo(@PathParam("id") int id) throws ParseException, IOException {
+        MotivoControl.excluir(id);
+    }
+
+    @PUT
+    @Path("/motivo/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void excluiMotivo(String data) throws ParseException, IOException {
-        MotivoControl.excluir(data);
+    public void alteraMotivo(@PathParam("id") int id, String data) throws ParseException, IOException {
+        MotivoControl.altera(id, data);
     }
 
     @POST
-    @Path("/motivoAlterar")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public void alteraMotivo(String data) throws ParseException, IOException {
-        MotivoControl.altera(data);
-    }
-
-    @POST
-    @Path("/motivoCadastrar")
+    @Path("/motivo")
     @Consumes(MediaType.APPLICATION_JSON)
     public void cadastraMotivo(String data) throws ParseException, IOException {
         MotivoControl.cadastra(data);
@@ -97,62 +105,74 @@ public class Salf_server {
     // MÉTODOS RELACIONADOS A SALA
     // ------- ------------ - ----
     @GET
-    @Path("/salaListar")
+    @Path("/sala")
     @Produces(MediaType.APPLICATION_JSON)
-    public String listaSalas(@DefaultValue("-1") @QueryParam("id") int id) throws ParseException, IOException {
+    public String listaSalas() throws ParseException, IOException {
+        return SalaControl.listar(-1);
+    }
+    
+    @GET
+    @Path("/sala/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String listaSalas(@PathParam("id") int id) throws ParseException, IOException {
         return SalaControl.listar(id);
     }
 
-    @POST
-    @Path("/salaDeletar")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public void excluiSala(String json) throws ParseException, IOException {
-        SalaControl.excluir(json);
+    @DELETE
+    @Path("/sala/{id}")
+    public void excluiSala(@PathParam("id") int id) throws ParseException, IOException {
+        SalaControl.excluir(id);
     }
 
     @POST
-    @Path("/salaCadastrar")
+    @Path("/sala")
     @Consumes(MediaType.APPLICATION_JSON)
     public void cadastraSala(String json) throws ParseException, IOException {
         SalaControl.cadastra(json);
     }
 
-    @POST
-    @Path("/salaAlterar")
+    @PUT
+    @Path("/sala/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void alteraSala(String json) throws ParseException, IOException {
-        SalaControl.altera(json);
+    public void alteraSala(@PathParam("id") int id, String json) throws ParseException, IOException {
+        SalaControl.altera(id, json);
     }
 
     // ------- ------------ - ------------
     // MÉTODOS RELACIONADOS A DEPARTAMENTO
     // ------- ------------ - ------------
     @GET
-    @Path("/departamentoListar")
+    @Path("/departamento")
     @Produces(MediaType.APPLICATION_JSON)
-    public String listaDepartamentos(@DefaultValue("-1") @QueryParam("id") int id) throws ParseException, IOException {
+    public String listaDepartamentos() throws ParseException, IOException {
+        return DepartamentoControl.listar(-1);
+    }
+    
+    @GET
+    @Path("/departamento/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String listaDepartamentos(@PathParam("id") int id) throws ParseException, IOException {
         return DepartamentoControl.listar(id);
     }
 
-    @POST
-    @Path("/departamentoDeletar")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public void excluiDepartamento(String json) throws ParseException, IOException {
-        DepartamentoControl.excluir(json);
+    @DELETE
+    @Path("/departamento/{id}")
+    public void excluiDepartamento(@PathParam("id") int id) throws ParseException, IOException {
+        DepartamentoControl.excluir(id);
     }
 
     @POST
-    @Path("/departamentoCadastrar")
+    @Path("/departamento")
     @Consumes(MediaType.APPLICATION_JSON)
     public void cadastraDepartamento(String json) throws ParseException, IOException {
         DepartamentoControl.cadastra(json);
     }
 
-    @POST
-    @Path("/departamentoAlterar")
+    @PUT
+    @Path("/departamento/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void alteraDepartamento(String json) throws ParseException, IOException {
-        DepartamentoControl.altera(json);
+    public void alteraDepartamento(@PathParam("id") int id, String json) throws ParseException, IOException {
+        DepartamentoControl.altera(id, json);
     }
 
     /**
