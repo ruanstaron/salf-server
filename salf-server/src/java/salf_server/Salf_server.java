@@ -3,6 +3,7 @@ package salf_server;
 import Control.DepartamentoControl;
 import Control.LoginControl;
 import Control.MotivoControl;
+import Control.ProfessorControl;
 import Control.SalaControl;
 import com.nimbusds.jose.JOSEException;
 import java.io.IOException;
@@ -18,9 +19,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.core.MediaType;
 import java.text.ParseException;
 import javax.ws.rs.DELETE;
-import javax.ws.rs.DefaultValue;
 import javax.ws.rs.PathParam;
-import javax.ws.rs.QueryParam;
 
 /**
  * REST Web Service
@@ -173,6 +172,43 @@ public class Salf_server {
     @Consumes(MediaType.APPLICATION_JSON)
     public void alteraDepartamento(@PathParam("id") int id, String json) throws ParseException, IOException {
         DepartamentoControl.altera(id, json);
+    }
+    
+    // ------- ------------ - -----------
+    // MÉTODOS RELACIONADOS A PROFESSORES
+    // ------- ------------ - -----------
+    @GET
+    @Path("/professor")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String listaProfessores() throws ParseException, IOException {
+        return ProfessorControl.listar(-1);
+    }
+    
+    @GET
+    @Path("/professor/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String listaProfessores(@PathParam("id") int id) throws ParseException, IOException {
+        return ProfessorControl.listar(id);
+    }
+
+    @DELETE
+    @Path("/professor/{id}")
+    public void excluiProfessor(@PathParam("id") int id) throws ParseException, IOException {
+        ProfessorControl.excluir(id);
+    }
+
+    @POST
+    @Path("/professor")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void cadastraProfessor(String json) throws ParseException, IOException {
+        ProfessorControl.cadastra(json);
+    }
+
+    @PUT
+    @Path("/professor/{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void alteraProfessor(@PathParam("id") int id, String json) throws ParseException, IOException {
+        ProfessorControl.altera(id, json);
     }
 
     /**
