@@ -21,6 +21,8 @@ import javax.ws.rs.core.MediaType;
 import java.text.ParseException;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
 
 /**
  * REST Web Service
@@ -37,6 +39,14 @@ public class Salf_server {
      * Creates a new instance of Salf_server
      */
     public Salf_server() {
+    }
+    
+    private Response makeCors(ResponseBuilder req) {
+        ResponseBuilder rb = req
+                .header("Access-Control-Allow-Origin", "*")
+                .header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
+                .header("Access-Control-Allow-Headers", "X-Requested-With, Content-Type, X-Codingpedia");;
+        return rb.build();
     }
 
     @POST
@@ -69,35 +79,42 @@ public class Salf_server {
     @GET
     @Path("/motivo")
     @Produces(MediaType.APPLICATION_JSON)
-    public String listaMotivos() throws ParseException {
-        return MotivoControl.listar(-1);
+    public Response listaMotivos() throws ParseException {
+        return makeCors(Response.ok().entity(
+                MotivoControl.listar(-1)
+        ));
     }
 
     @GET
     @Path("/motivo/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public String listaMotivos(@PathParam("id") int id) throws ParseException {
-        return MotivoControl.listar(id);
+    public Response listaMotivos(@PathParam("id") int id) throws ParseException {
+        return makeCors(Response.ok().entity(
+                MotivoControl.listar(id)
+        ));
     }
 
     @DELETE
     @Path("/motivo/{id}")
-    public void excluiMotivo(@PathParam("id") int id) throws ParseException, IOException {
+    public Response excluiMotivo(@PathParam("id") int id) throws ParseException, IOException {
         MotivoControl.excluir(id);
+        return makeCors(Response.ok());
     }
 
     @PUT
     @Path("/motivo/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void alteraMotivo(@PathParam("id") int id, String data) throws ParseException, IOException {
+    public Response alteraMotivo(@PathParam("id") int id, String data) throws ParseException, IOException {
         MotivoControl.altera(id, data);
+        return makeCors(Response.ok());
     }
 
     @POST
     @Path("/motivo")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void cadastraMotivo(String data) throws ParseException, IOException {
+    public Response cadastraMotivo(String data) throws ParseException, IOException {
         MotivoControl.cadastra(data);
+        return makeCors(Response.ok());
     }
 
     // ------- ------------ - ----
@@ -143,35 +160,42 @@ public class Salf_server {
     @GET
     @Path("/departamento")
     @Produces(MediaType.APPLICATION_JSON)
-    public String listaDepartamentos() throws ParseException, IOException {
-        return DepartamentoControl.listar(-1);
+    public Response listaDepartamentos() throws ParseException, IOException {
+        return makeCors(Response.ok().entity(
+                DepartamentoControl.listar(-1)
+        ));
     }
 
     @GET
     @Path("/departamento/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public String listaDepartamentos(@PathParam("id") int id) throws ParseException, IOException {
-        return DepartamentoControl.listar(id);
+    public Response listaDepartamentos(@PathParam("id") int id) throws ParseException, IOException {
+        return makeCors(Response.ok().entity(
+                DepartamentoControl.listar(id)
+        ));
     }
 
     @DELETE
     @Path("/departamento/{id}")
-    public void excluiDepartamento(@PathParam("id") int id) throws ParseException, IOException {
+    public Response excluiDepartamento(@PathParam("id") int id) throws ParseException, IOException {
         DepartamentoControl.excluir(id);
+        return makeCors(Response.ok());
     }
 
     @POST
     @Path("/departamento")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void cadastraDepartamento(String json) throws ParseException, IOException {
+    public Response cadastraDepartamento(String json) throws ParseException, IOException {
         DepartamentoControl.cadastra(json);
+        return makeCors(Response.ok());
     }
 
     @PUT
     @Path("/departamento/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void alteraDepartamento(@PathParam("id") int id, String json) throws ParseException, IOException {
+    public Response alteraDepartamento(@PathParam("id") int id, String json) throws ParseException, IOException {
         DepartamentoControl.altera(id, json);
+        return makeCors(Response.ok());
     }
 
     // ------- ------------ - -----------
