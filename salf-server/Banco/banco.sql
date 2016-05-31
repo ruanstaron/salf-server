@@ -1,4 +1,4 @@
-CREATE TABLE departamento (
+﻿CREATE TABLE departamento (
 	id_departamento		SERIAL NOT NULL PRIMARY KEY,
 	descricao			VARCHAR(255) NOT NULL UNIQUE
 );
@@ -16,8 +16,8 @@ CREATE TABLE usuario (
 CREATE TABLE motivo (
 	id_motivo			SERIAL NOT NULL PRIMARY KEY,
 	descricao			VARCHAR(255) NOT NULL UNIQUE,
-	--Se trata de um motivo quando a sala está indisponível
-	incidencia			VARCHAR (255)
+	--Se true, é uma incidência, caso contrário é um motivo
+	incidencia			BOOLEAN
 );
 
 CREATE TABLE sala (
@@ -40,9 +40,9 @@ INSERT INTO public.departamento(descricao) VALUES ('Engenharia elétrica');
 INSERT INTO public.departamento(descricao) VALUES ('Engenharia mecânica');
 INSERT INTO public.usuario(nome, senha, id_departamento, email, tipo) VALUES ('admin', 'admin', 1, 'administracao@email.com', true);
 INSERT INTO public.usuario(nome, senha, id_departamento, email, tipo) VALUES ('user', 'user', 1, 'usuario@email.com', false);
-INSERT INTO public.motivo(descricao) VALUES ('Aula');
-INSERT INTO public.motivo(descricao, incidencia) VALUES ('Indisponível', 'Computador queimado');
-INSERT INTO public.motivo(descricao) VALUES ('Prova');
+INSERT INTO public.motivo(descricao, incidencia) VALUES ('Aula', false);
+INSERT INTO public.motivo(descricao, incidencia) VALUES ('Indisponível', true);
+INSERT INTO public.motivo(descricao, incidencia) VALUES ('Prova', false);
 INSERT INTO public.sala(descricao) VALUES ('Lab1');
 INSERT INTO public.sala(descricao) VALUES ('Lab2');
 INSERT INTO public.sala(descricao) VALUES ('Lab3');

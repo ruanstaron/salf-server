@@ -1,6 +1,7 @@
 package salf_server;
 
 import Control.DepartamentoControl;
+import Control.IncidenciaControl;
 import Control.LoginControl;
 import Control.MotivoControl;
 import Control.ProfessorControl;
@@ -42,12 +43,11 @@ public class Salf_server {
     @Path("/login")
     @Consumes(MediaType.APPLICATION_JSON)
     public String efetuaLogin(String data) throws IOException, SQLException, JOSEException {
-        if(LoginControl.realizaLogin(data)){
+        if (LoginControl.realizaLogin(data)) {
             Token token = new Token();
             String s = token.geraToken(LoginControl.getId_usuario(data));
             return LoginControl.geraLogin(s);
-        }
-        else{
+        } else {
             return null;
         }
     }
@@ -72,7 +72,7 @@ public class Salf_server {
     public String listaMotivos() throws ParseException {
         return MotivoControl.listar(-1);
     }
-    
+
     @GET
     @Path("/motivo/{id}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -109,7 +109,7 @@ public class Salf_server {
     public String listaSalas() throws ParseException, IOException {
         return SalaControl.listar(-1);
     }
-    
+
     @GET
     @Path("/sala/{id}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -146,7 +146,7 @@ public class Salf_server {
     public String listaDepartamentos() throws ParseException, IOException {
         return DepartamentoControl.listar(-1);
     }
-    
+
     @GET
     @Path("/departamento/{id}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -173,7 +173,7 @@ public class Salf_server {
     public void alteraDepartamento(@PathParam("id") int id, String json) throws ParseException, IOException {
         DepartamentoControl.altera(id, json);
     }
-    
+
     // ------- ------------ - -----------
     // MÉTODOS RELACIONADOS A PROFESSORES
     // ------- ------------ - -----------
@@ -183,7 +183,7 @@ public class Salf_server {
     public String listaProfessores() throws ParseException, IOException {
         return ProfessorControl.listar(-1);
     }
-    
+
     @GET
     @Path("/professor/{id}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -209,6 +209,43 @@ public class Salf_server {
     @Consumes(MediaType.APPLICATION_JSON)
     public void alteraProfessor(@PathParam("id") int id, String json) throws ParseException, IOException {
         ProfessorControl.altera(id, json);
+    }
+
+    // ------- ------------ - ----------
+    // MÉTODOS RELACIONADOS A INCIDENCIA
+    // ------- ------------ - ----------
+    @GET
+    @Path("/incidencia")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String listaIncidencias() throws ParseException {
+        return IncidenciaControl.listar(-1);
+    }
+
+    @GET
+    @Path("/incidencia/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String listaIncidencias(@PathParam("id") int id) throws ParseException {
+        return IncidenciaControl.listar(id);
+    }
+
+    @DELETE
+    @Path("/incidencia/{id}")
+    public void excluiIncidencia(@PathParam("id") int id) throws ParseException, IOException {
+        IncidenciaControl.excluir(id);
+    }
+
+    @PUT
+    @Path("/incidencia/{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void alteraIncidencia(@PathParam("id") int id, String data) throws ParseException, IOException {
+        IncidenciaControl.altera(id, data);
+    }
+
+    @POST
+    @Path("/incidencia")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void cadastraIncidencia(String data) throws ParseException, IOException {
+        IncidenciaControl.cadastra(data);
     }
 
     /**

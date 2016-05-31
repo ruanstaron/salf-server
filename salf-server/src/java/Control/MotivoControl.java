@@ -29,7 +29,7 @@ public class MotivoControl {
         MotivoModel.executaUpdate(
                 "  delete from motivo m\n"
                 + " where m.id_motivo = " + motivo.getId() + "\n"
-                + "   and m.incidencia is null\n"
+                + "   and m.incidencia = false\n"
         );
     }
 
@@ -41,7 +41,7 @@ public class MotivoControl {
                 "  update motivo\n"
                 + "   set descricao = '" + motivo.getDescricao() + "'\n"
                 + " where id_motivo = " + motivo.getId() + "\n"
-                + "   and incidencia is null\n"
+                + "   and incidencia = false\n"
         );
     }
 
@@ -51,7 +51,7 @@ public class MotivoControl {
         MotivoModel.executaUpdate(
                 "  insert into motivo\n"
                 + "       (descricao, incidencia)\n"
-                + "values ('" + motivo.getDescricao() + "', null)\n"
+                + "values ('" + motivo.getDescricao() + "', false)\n"
         );
     }
 
