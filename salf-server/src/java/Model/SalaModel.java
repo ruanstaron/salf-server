@@ -42,6 +42,7 @@ public class SalaModel {
                 );
                 lista.add(salaAux);
             }
+            conn.close();
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(MotivoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -61,6 +62,7 @@ public class SalaModel {
             //Executa a query
             java.sql.Statement st = conn.createStatement();
             st.executeUpdate(sql);
+            conn.close();
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(MotivoModel.class.getName()).log(Level.SEVERE, null, ex);
         }

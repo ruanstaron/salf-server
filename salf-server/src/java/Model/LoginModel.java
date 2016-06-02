@@ -26,6 +26,7 @@ public class LoginModel {
             while (rs.next()) {
                 id = rs.getInt("id_usuario");
             }
+            conn.close();
         } catch (ClassNotFoundException | SQLException ex) {
             return false;
         }
@@ -52,6 +53,7 @@ public class LoginModel {
             while (rs.next()) {
                 id = rs.getInt("id_usuario");
             }
+            conn.close();
         } catch (ClassNotFoundException | SQLException ex) {
             return id;
         }

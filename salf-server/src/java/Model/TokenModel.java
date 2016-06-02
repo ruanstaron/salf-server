@@ -32,6 +32,7 @@ public class TokenModel {
             //Executa a query
             java.sql.Statement st = conn.createStatement();
             st.executeUpdate(sql);
+            conn.close();
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(MotivoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -53,6 +54,7 @@ public class TokenModel {
             while (rs.next()) {
                 chave = rs.getString("chave");
             }
+            conn.close();
         } catch (ClassNotFoundException | SQLException ex) {
             return null;
         }

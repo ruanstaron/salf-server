@@ -43,6 +43,7 @@ public class IncidenciaModel {
                 );
                 lista.add(incidenciaAux);
             }
+            conn.close();
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(IncidenciaModel.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -62,6 +63,7 @@ public class IncidenciaModel {
             //Executa a query
             java.sql.Statement st = conn.createStatement();
             st.executeUpdate(sql);
+            conn.close();
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(IncidenciaModel.class.getName()).log(Level.SEVERE, null, ex);
         }

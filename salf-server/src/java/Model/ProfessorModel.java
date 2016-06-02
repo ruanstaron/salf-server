@@ -55,6 +55,7 @@ public class ProfessorModel {
                 professorAux.setDepartamento(rs.getString("departamento"));
                 lista.add(professorAux);
             }
+            conn.close();
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(MotivoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -74,6 +75,7 @@ public class ProfessorModel {
             //Executa a query
             java.sql.Statement st = conn.createStatement();
             st.executeUpdate(sql);
+            conn.close();
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(MotivoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
