@@ -5,6 +5,7 @@ import Control.IncidenciaControl;
 import Control.LoginControl;
 import Control.MotivoControl;
 import Control.ProfessorControl;
+import Control.ReservaControl;
 import Control.SalaControl;
 import com.nimbusds.jose.JOSEException;
 import java.io.IOException;
@@ -123,35 +124,42 @@ public class Salf_server {
     @GET
     @Path("/sala")
     @Produces(MediaType.APPLICATION_JSON)
-    public String listaSalas() throws ParseException, IOException {
-        return SalaControl.listar(-1);
+    public Response listaSalas() throws ParseException, IOException {
+        return makeCors(Response.ok().entity(
+                SalaControl.listar(-1)
+        ));
     }
 
     @GET
     @Path("/sala/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public String listaSalas(@PathParam("id") int id) throws ParseException, IOException {
-        return SalaControl.listar(id);
+    public Response listaSalas(@PathParam("id") int id) throws ParseException, IOException {
+        return makeCors(Response.ok().entity(
+                SalaControl.listar(id)
+        ));
     }
 
     @DELETE
     @Path("/sala/{id}")
-    public void excluiSala(@PathParam("id") int id) throws ParseException, IOException {
+    public Response excluiSala(@PathParam("id") int id) throws ParseException, IOException {
         SalaControl.excluir(id);
+        return makeCors(Response.ok());
     }
 
     @POST
     @Path("/sala")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void cadastraSala(String json) throws ParseException, IOException {
+    public Response cadastraSala(String json) throws ParseException, IOException {
         SalaControl.cadastra(json);
+        return makeCors(Response.ok());
     }
 
     @PUT
     @Path("/sala/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void alteraSala(@PathParam("id") int id, String json) throws ParseException, IOException {
+    public Response alteraSala(@PathParam("id") int id, String json) throws ParseException, IOException {
         SalaControl.altera(id, json);
+        return makeCors(Response.ok());
     }
 
     // ------- ------------ - ------------
@@ -204,35 +212,42 @@ public class Salf_server {
     @GET
     @Path("/professor")
     @Produces(MediaType.APPLICATION_JSON)
-    public String listaProfessores() throws ParseException, IOException {
-        return ProfessorControl.listar(-1);
+    public Response listaProfessores() throws ParseException, IOException {
+        return makeCors(Response.ok().entity(
+                ProfessorControl.listar(-1)
+        ));
     }
 
     @GET
     @Path("/professor/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public String listaProfessores(@PathParam("id") int id) throws ParseException, IOException {
-        return ProfessorControl.listar(id);
+    public Response listaProfessores(@PathParam("id") int id) throws ParseException, IOException {
+        return makeCors(Response.ok().entity(
+                ProfessorControl.listar(id)
+        ));
     }
 
     @DELETE
     @Path("/professor/{id}")
-    public void excluiProfessor(@PathParam("id") int id) throws ParseException, IOException {
+    public Response excluiProfessor(@PathParam("id") int id) throws ParseException, IOException {
         ProfessorControl.excluir(id);
+        return makeCors(Response.ok());
     }
 
     @POST
     @Path("/professor")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void cadastraProfessor(String json) throws ParseException, IOException {
+    public Response cadastraProfessor(String json) throws ParseException, IOException {
         ProfessorControl.cadastra(json);
+        return makeCors(Response.ok());
     }
 
     @PUT
     @Path("/professor/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void alteraProfessor(@PathParam("id") int id, String json) throws ParseException, IOException {
+    public Response alteraProfessor(@PathParam("id") int id, String json) throws ParseException, IOException {
         ProfessorControl.altera(id, json);
+        return makeCors(Response.ok());
     }
 
     // ------- ------------ - ----------
@@ -241,37 +256,88 @@ public class Salf_server {
     @GET
     @Path("/incidencia")
     @Produces(MediaType.APPLICATION_JSON)
-    public String listaIncidencias() throws ParseException {
-        return IncidenciaControl.listar(-1);
+    public Response listaIncidencias() throws ParseException {
+        return makeCors(Response.ok().entity(
+                IncidenciaControl.listar(-1)
+        ));
     }
 
     @GET
     @Path("/incidencia/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public String listaIncidencias(@PathParam("id") int id) throws ParseException {
-        return IncidenciaControl.listar(id);
+    public Response listaIncidencias(@PathParam("id") int id) throws ParseException {
+        return makeCors(Response.ok().entity(
+                IncidenciaControl.listar(id)
+        ));
     }
 
     @DELETE
     @Path("/incidencia/{id}")
-    public void excluiIncidencia(@PathParam("id") int id) throws ParseException, IOException {
+    public Response excluiIncidencia(@PathParam("id") int id) throws ParseException, IOException {
         IncidenciaControl.excluir(id);
+        return makeCors(Response.ok());
     }
 
     @PUT
     @Path("/incidencia/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void alteraIncidencia(@PathParam("id") int id, String data) throws ParseException, IOException {
+    public Response alteraIncidencia(@PathParam("id") int id, String data) throws ParseException, IOException {
         IncidenciaControl.altera(id, data);
+        return makeCors(Response.ok());
     }
 
     @POST
     @Path("/incidencia")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void cadastraIncidencia(String data) throws ParseException, IOException {
+    public Response cadastraIncidencia(String data) throws ParseException, IOException {
         IncidenciaControl.cadastra(data);
+        return makeCors(Response.ok());
+    }
+    
+    // ------- ------------ - -------
+    // MÉTODOS RELACIONADOS A RESERVA
+    // ------- ------------ - -------
+    @POST
+    @Path("/reserva")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response cadastraReserva(String json) throws ParseException, IOException {
+        ReservaControl.cadastra(json);
+        return makeCors(Response.ok());
+    }
+    
+    @PUT
+    @Path("/reserva/{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response alteraReserva(@PathParam("id") int id, String data) throws ParseException, IOException {
+        ReservaControl.altera(id, data);
+        return makeCors(Response.ok());
+    }
+    
+    @DELETE
+    @Path("/reserva/{id}")
+    public Response excluiReserva(@PathParam("id") int id) throws ParseException, IOException {
+        ReservaControl.excluir(id);
+        return makeCors(Response.ok());
+    }
+    
+    @GET
+    @Path("/reserva")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response listaReserva() throws ParseException, IOException {
+        return makeCors(Response.ok().entity(
+                ReservaControl.listar(-1)
+        ));
     }
 
+    @GET
+    @Path("/reserva/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response listaReserva(@PathParam("id") int id) throws ParseException, IOException {
+        return makeCors(Response.ok().entity(
+                ReservaControl.listar(id)
+        ));
+    }
+    
     /**
      * PUT method for updating or creating an instance of Salf_server
      *

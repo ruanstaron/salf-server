@@ -1,6 +1,6 @@
 package Value;
 
-import Util.Util;
+import Util.ProfessorUtil;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -31,11 +31,11 @@ public class SalaValue {
             ObjectMapper om = new ObjectMapper();
             JsonNode node = om.readValue(json, JsonNode.class);
 
-            if (node.has(Util.PAR_ID)) {
-                this.id = node.get(Util.PAR_ID).asInt();
+            if (node.has(ProfessorUtil.PAR_ID)) {
+                this.id = node.get(ProfessorUtil.PAR_ID).asInt();
             }
-            if (node.has(Util.PAR_DESCRICAO)) {
-                this.descricao = node.get(Util.PAR_DESCRICAO).asText();
+            if (node.has(ProfessorUtil.PAR_DESCRICAO)) {
+                this.descricao = node.get(ProfessorUtil.PAR_DESCRICAO).asText();
             }
         } catch (Exception e) {
             System.out.println("Exceção: " + e);

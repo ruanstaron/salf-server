@@ -1,6 +1,6 @@
 package Value;
 
-import Util.Util;
+import Util.ProfessorUtil;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -45,20 +45,20 @@ public class ProfessorValue {
             ObjectMapper om = new ObjectMapper();
             JsonNode node = om.readValue(json, JsonNode.class);
 
-            if (node.has(Util.PAR_ID)) {
-                this.id = node.get(Util.PAR_ID).asInt();
+            if (node.has(ProfessorUtil.PAR_ID)) {
+                this.id = node.get(ProfessorUtil.PAR_ID).asInt();
             }
-            if (node.has(Util.PAR_NOME)) {
-                this.nome = node.get(Util.PAR_NOME).asText();
+            if (node.has(ProfessorUtil.PAR_NOME)) {
+                this.nome = node.get(ProfessorUtil.PAR_NOME).asText();
             }
-            if (node.has(Util.PAR_SENHA)) {
-                this.senha = node.get(Util.PAR_SENHA).asText();
+            if (node.has(ProfessorUtil.PAR_SENHA)) {
+                this.senha = node.get(ProfessorUtil.PAR_SENHA).asText();
             }
-            if (node.has(Util.PAR_EMAIL)) {
-                this.email = node.get(Util.PAR_EMAIL).asText();
+            if (node.has(ProfessorUtil.PAR_EMAIL)) {
+                this.email = node.get(ProfessorUtil.PAR_EMAIL).asText();
             }
-            if (node.has(Util.PAR_DEPARTAMENTO_ID)) {
-                this.id_departamento = node.get(Util.PAR_DEPARTAMENTO_ID).asInt();
+            if (node.has(ProfessorUtil.PAR_DEPARTAMENTO_ID)) {
+                this.id_departamento = node.get(ProfessorUtil.PAR_DEPARTAMENTO_ID).asInt();
             }
         } catch (Exception e) {
             System.out.println("Exceção: " + e);
