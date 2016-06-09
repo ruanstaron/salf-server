@@ -3,17 +3,14 @@ package Model;
 import Value.IncidenciaValue;
 import java.sql.Connection;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * @author Ruan
  */
 public class IncidenciaModel {
 
-    public static ArrayList<IncidenciaValue> lista(IncidenciaValue incidencia) {
+    public static ArrayList<IncidenciaValue> lista(IncidenciaValue incidencia) throws Exception {
         String sql = "select m.*\n"
                 + "     from motivo m\n"
                 + "    where m.incidencia = true\n";
@@ -44,29 +41,12 @@ public class IncidenciaModel {
                 lista.add(incidenciaAux);
             }
             conn.close();
-        } catch (ClassNotFoundException | SQLException ex) {
-            Logger.getLogger(IncidenciaModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception e) {
+            System.out.println("Exceção ao listar motivos: " + e.getMessage());
+            throw e;
         }
         
         return lista;
-    }
-    
-    public static void executaUpdate(String sql) {
-        System.out.println("Sql de update: \n" + sql);
-        
-        try {
-            //Registra o driver
-            Class.forName("org.postgresql.Driver");
-            //Solicita uma conexao
-            Connection conn = ConnectionFactory.getConnection();
-
-            //Executa a query
-            java.sql.Statement st = conn.createStatement();
-            st.executeUpdate(sql);
-            conn.close();
-        } catch (ClassNotFoundException | SQLException ex) {
-            Logger.getLogger(IncidenciaModel.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
     
 }

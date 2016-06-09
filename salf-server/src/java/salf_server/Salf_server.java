@@ -7,7 +7,6 @@ import Control.MotivoControl;
 import Control.ProfessorControl;
 import Control.ReservaControl;
 import Control.SalaControl;
-import Util.SalfException;
 import Util.SalfExceptionUtil;
 import com.nimbusds.jose.JOSEException;
 import java.io.IOException;
@@ -159,7 +158,8 @@ public class Salf_server {
                     SalaControl.listar(-1)
             ));
         } catch (Exception e) {
-            return makeCors(Response.serverError());
+            return makeCors(Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity(SalfExceptionUtil.toJson(e.getMessage())));
         }
     }
 
@@ -172,42 +172,49 @@ public class Salf_server {
                     SalaControl.listar(id)
             ));
         } catch (Exception e) {
-            return makeCors(Response.serverError());
+            return makeCors(Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity(SalfExceptionUtil.toJson(e.getMessage())));
         }
     }
 
     @DELETE
     @Path("/sala/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
     public Response excluiSala(@PathParam("id") int id) {
         try {
             SalaControl.excluir(id);
             return makeCors(Response.ok());
         } catch (Exception e) {
-            return makeCors(Response.serverError());
+            return makeCors(Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity(SalfExceptionUtil.toJson(e.getMessage())));
         }
     }
 
     @POST
     @Path("/sala")
     @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response cadastraSala(String json) {
         try {
             SalaControl.cadastra(json);
             return makeCors(Response.ok());
         } catch (Exception e) {
-            return makeCors(Response.serverError());
+            return makeCors(Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity(SalfExceptionUtil.toJson(e.getMessage())));
         }
     }
 
     @PUT
     @Path("/sala/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response alteraSala(@PathParam("id") int id, String json) {
         try {
             SalaControl.altera(id, json);
             return makeCors(Response.ok());
         } catch (Exception e) {
-            return makeCors(Response.serverError());
+            return makeCors(Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity(SalfExceptionUtil.toJson(e.getMessage())));
         }
     }
 
@@ -223,7 +230,8 @@ public class Salf_server {
                     DepartamentoControl.listar(-1)
             ));
         } catch (Exception e) {
-            return makeCors(Response.serverError());
+            return makeCors(Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity(SalfExceptionUtil.toJson(e.getMessage())));
         }
     }
 
@@ -236,42 +244,49 @@ public class Salf_server {
                     DepartamentoControl.listar(id)
             ));
         } catch (Exception e) {
-            return makeCors(Response.serverError());
+            return makeCors(Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity(SalfExceptionUtil.toJson(e.getMessage())));
         }
     }
 
     @DELETE
     @Path("/departamento/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
     public Response excluiDepartamento(@PathParam("id") int id) {
         try {
             DepartamentoControl.excluir(id);
             return makeCors(Response.ok());
         } catch (Exception e) {
-            return makeCors(Response.serverError());
+            return makeCors(Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity(SalfExceptionUtil.toJson(e.getMessage())));
         }
     }
 
     @POST
     @Path("/departamento")
     @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response cadastraDepartamento(String json) {
         try {
             DepartamentoControl.cadastra(json);
             return makeCors(Response.ok());
         } catch (Exception e) {
-            return makeCors(Response.serverError());
+            return makeCors(Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity(SalfExceptionUtil.toJson(e.getMessage())));
         }
     }
 
     @PUT
     @Path("/departamento/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response alteraDepartamento(@PathParam("id") int id, String json) {
         try {
             DepartamentoControl.altera(id, json);
             return makeCors(Response.ok());
         } catch (Exception e) {
-            return makeCors(Response.serverError());
+            return makeCors(Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity(SalfExceptionUtil.toJson(e.getMessage())));
         }
     }
 
@@ -287,7 +302,8 @@ public class Salf_server {
                     ProfessorControl.listar(-1)
             ));
         } catch (Exception e) {
-            return makeCors(Response.serverError());
+            return makeCors(Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity(SalfExceptionUtil.toJson(e.getMessage())));
         }
     }
 
@@ -300,42 +316,49 @@ public class Salf_server {
                     ProfessorControl.listar(id)
             ));
         } catch (Exception e) {
-            return makeCors(Response.serverError());
+            return makeCors(Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity(SalfExceptionUtil.toJson(e.getMessage())));
         }
     }
 
     @DELETE
     @Path("/professor/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
     public Response excluiProfessor(@PathParam("id") int id) {
         try {
             ProfessorControl.excluir(id);
             return makeCors(Response.ok());
         } catch (Exception e) {
-            return makeCors(Response.serverError());
+            return makeCors(Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity(SalfExceptionUtil.toJson(e.getMessage())));
         }
     }
 
     @POST
     @Path("/professor")
     @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response cadastraProfessor(String json) {
         try {
             ProfessorControl.cadastra(json);
             return makeCors(Response.ok());
         } catch (Exception e) {
-            return makeCors(Response.serverError());
+            return makeCors(Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity(SalfExceptionUtil.toJson(e.getMessage())));
         }
     }
 
     @PUT
     @Path("/professor/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response alteraProfessor(@PathParam("id") int id, String json) {
         try {
             ProfessorControl.altera(id, json);
             return makeCors(Response.ok());
         } catch (Exception e) {
-            return makeCors(Response.serverError());
+            return makeCors(Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity(SalfExceptionUtil.toJson(e.getMessage())));
         }
     }
 
@@ -351,7 +374,8 @@ public class Salf_server {
                     IncidenciaControl.listar(-1)
             ));
         } catch (Exception e) {
-            return makeCors(Response.serverError());
+            return makeCors(Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity(SalfExceptionUtil.toJson(e.getMessage())));
         }
     }
 
@@ -364,42 +388,49 @@ public class Salf_server {
                     IncidenciaControl.listar(id)
             ));
         } catch (Exception e) {
-            return makeCors(Response.serverError());
+            return makeCors(Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity(SalfExceptionUtil.toJson(e.getMessage())));
         }
     }
 
     @DELETE
     @Path("/incidencia/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
     public Response excluiIncidencia(@PathParam("id") int id) {
         try {
             IncidenciaControl.excluir(id);
             return makeCors(Response.ok());
         } catch (Exception e) {
-            return makeCors(Response.serverError());
+            return makeCors(Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity(SalfExceptionUtil.toJson(e.getMessage())));
         }
     }
 
     @PUT
     @Path("/incidencia/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response alteraIncidencia(@PathParam("id") int id, String data) {
         try {
             IncidenciaControl.altera(id, data);
             return makeCors(Response.ok());
         } catch (Exception e) {
-            return makeCors(Response.serverError());
+            return makeCors(Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity(SalfExceptionUtil.toJson(e.getMessage())));
         }
     }
 
     @POST
     @Path("/incidencia")
     @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response cadastraIncidencia(String data) {
         try {
             IncidenciaControl.cadastra(data);
             return makeCors(Response.ok());
         } catch (Exception e) {
-            return makeCors(Response.serverError());
+            return makeCors(Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity(SalfExceptionUtil.toJson(e.getMessage())));
         }
     }
 
@@ -409,35 +440,41 @@ public class Salf_server {
     @POST
     @Path("/reserva")
     @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response cadastraReserva(String json) {
         try {
             ReservaControl.cadastra(json);
             return makeCors(Response.ok());
         } catch (Exception e) {
-            return makeCors(Response.serverError());
+            return makeCors(Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity(SalfExceptionUtil.toJson(e.getMessage())));
         }
     }
 
     @PUT
     @Path("/reserva/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response alteraReserva(@PathParam("id") int id, String data) {
         try {
             ReservaControl.altera(id, data);
             return makeCors(Response.ok());
         } catch (Exception e) {
-            return makeCors(Response.serverError());
+            return makeCors(Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity(SalfExceptionUtil.toJson(e.getMessage())));
         }
     }
 
     @DELETE
     @Path("/reserva/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
     public Response excluiReserva(@PathParam("id") int id) {
         try {
             ReservaControl.excluir(id);
             return makeCors(Response.ok());
         } catch (Exception e) {
-            return makeCors(Response.serverError());
+            return makeCors(Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity(SalfExceptionUtil.toJson(e.getMessage())));
         }
     }
 
@@ -450,7 +487,8 @@ public class Salf_server {
                     ReservaControl.listar(-1)
             ));
         } catch (Exception e) {
-            return makeCors(Response.serverError());
+            return makeCors(Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity(SalfExceptionUtil.toJson(e.getMessage())));
         }
     }
 
@@ -463,7 +501,8 @@ public class Salf_server {
                     ReservaControl.listar(id)
             ));
         } catch (Exception e) {
-            return makeCors(Response.serverError());
+            return makeCors(Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity(SalfExceptionUtil.toJson(e.getMessage())));
         }
     }
 

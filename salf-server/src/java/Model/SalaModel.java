@@ -3,17 +3,14 @@ package Model;
 import Value.SalaValue;
 import java.sql.Connection;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * @author cristhian
  */
 public class SalaModel {
 
-    public static ArrayList<SalaValue> lista(SalaValue sala) {
+    public static ArrayList<SalaValue> lista(SalaValue sala) throws Exception {
         String sql = "select s.*\n"
                 + "     from sala s\n";
         if (sala.getId() != -1) {
@@ -43,29 +40,12 @@ public class SalaModel {
                 lista.add(salaAux);
             }
             conn.close();
-        } catch (ClassNotFoundException | SQLException ex) {
-            Logger.getLogger(MotivoModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception e) {
+            System.out.println("Exceção ao listar motivos: " + e.getMessage());
+            throw e;
         }
 
         return lista;
-    }
-
-    public static void executaUpdate(String sql) {
-        System.out.println("Sql de update: \n" + sql);
-
-        try {
-            //Registra o driver
-            Class.forName("org.postgresql.Driver");
-            //Solicita uma conexao
-            Connection conn = ConnectionFactory.getConnection();
-
-            //Executa a query
-            java.sql.Statement st = conn.createStatement();
-            st.executeUpdate(sql);
-            conn.close();
-        } catch (ClassNotFoundException | SQLException ex) {
-            Logger.getLogger(MotivoModel.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
 
 }

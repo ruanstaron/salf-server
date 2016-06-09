@@ -1,13 +1,13 @@
 package Control;
 
+import Model.DefaultModel;
 import Model.IncidenciaModel;
-import Model.MotivoModel;
+import Util.SalfException;
+import Util.SalfExceptionUtil;
 import Value.IncidenciaValue;
-import Value.MotivoValue;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
-import java.io.IOException;
-import java.text.ParseException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
@@ -15,7 +15,7 @@ import java.util.ArrayList;
  */
 public class IncidenciaControl {
 
-    public static String listar(int id) throws ParseException {
+    public static String listar(int id) throws Exception {
         IncidenciaValue incidencia = new IncidenciaValue(id, null);
         ArrayList<IncidenciaValue> incidencias = IncidenciaModel.lista(incidencia);
 
@@ -25,36 +25,70 @@ public class IncidenciaControl {
         return incidenciasJson;
     }
 
-    public static void excluir(int id) throws ParseException, IOException {
+    public static void excluir(int id) throws SalfException, Exception {
         IncidenciaValue incidencia = new IncidenciaValue(id, null);
 
-        IncidenciaModel.executaUpdate(
-                "  delete from motivo m\n"
-                + " where m.id_motivo = " + incidencia.getId() + "\n"
-                + "   and m.incidencia = true\n"
-        );
+        try {
+            DefaultModel.executaUpdate(
+                    "  delete from motivo m\n"
+                    + " where m.id_motivo = " + incidencia.getId() + "\n"
+                    + "   and m.incidencia = true\n"
+            );
+        } catch (SQLException e) {
+            String sqlState = e.getSQLState();
+
+            if (sqlState.equals(SalfExceptionUtil.FOREIGN_KEY)) {
+                throw new SalfException("Não é possível excluir esta incidência pois há reservas que a referenciam.");
+            } else if (sqlState.equals(SalfExceptionUtil.NO_AFFECTED_ROWS)) {
+                throw new SalfException("Incidência não encontrada. Exclusão falhou.");
+            }
+
+            throw new Exception(e);
+        }
     }
 
-    public static void altera(int id, String json) throws ParseException, IOException {
+    public static void altera(int id, String json) throws SalfException, Exception {
         IncidenciaValue incidencia = new IncidenciaValue(json);
         incidencia.setId(id);
 
-        IncidenciaModel.executaUpdate(
-                "  update motivo\n"
-                + "   set descricao = '" + incidencia.getDescricao() + "'\n"
-                + " where id_motivo = " + incidencia.getId() + "\n"
-                + "   and incidencia = true\n"
-        );
+        try {
+            DefaultModel.executaUpdate(
+                    "  update motivo\n"
+                    + "   set descricao = '" + incidencia.getDescricao() + "'\n"
+                    + " where id_motivo = " + incidencia.getId() + "\n"
+                    + "   and incidencia = true\n"
+            );
+        } catch (SQLException e) {
+            String sqlState = e.getSQLState();
+
+            if (sqlState.equals(SalfExceptionUtil.UNIQUE_KEY)) {
+                throw new SalfException("Já existe uma incidência cadastrada com esta descrição.");
+            } else if (sqlState.equals(SalfExceptionUtil.NO_AFFECTED_ROWS)) {
+                throw new SalfException("Incidência não encontrada. Alteração falhou.");
+            }
+
+            throw new Exception(e);
+        }
     }
 
-    public static void cadastra(String json) throws ParseException, IOException {
+    public static void cadastra(String json) throws SalfException, Exception {
         IncidenciaValue incidencia = new IncidenciaValue(json);
 
-        IncidenciaModel.executaUpdate(
-                "  insert into motivo\n"
-                + "       (descricao, incidencia)\n"
-                + "values ('" + incidencia.getDescricao() + "', true)\n"
-        );
+        try {
+            DefaultModel.executaUpdate(
+                    "  insert into motivo\n"
+                    + "       (descricao, incidencia)\n"
+                    + "values ('" + incidencia.getDescricao() + "', true)\n"
+            );
+        } catch (SQLException e) {
+            String sqlState = e.getSQLState();
+
+            if (sqlState.equals(SalfExceptionUtil.UNIQUE_KEY)) {
+                throw new SalfException("Já existe uma incidência cadastrada com esta descrição.");
+            }
+
+            throw new Exception(e);
+        }
     }
 
 }

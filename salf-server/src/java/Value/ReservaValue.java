@@ -85,7 +85,7 @@ public class ReservaValue {
         this.motivo = motivo;
     }
         
-    public ReservaValue(String json) {
+    public ReservaValue(String json) throws Exception {
         System.out.println("json " + json);
         this.id = -1;
         this.sala = -1;
@@ -114,7 +114,8 @@ public class ReservaValue {
                 this.hora = node.get(ReservaUtil.PAR_HORA).asText();
             }
         } catch (Exception e) {
-            System.out.println("Exceção: " + e);
+            System.out.println("Exceção ao interpretar reserva: " + e.getMessage());
+            throw e;
         }
     }
 

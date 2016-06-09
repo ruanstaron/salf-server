@@ -1,11 +1,13 @@
 package Control;
 
+import Model.DefaultModel;
 import Model.DepartamentoModel;
+import Util.SalfException;
+import Util.SalfExceptionUtil;
 import Value.DepartamentoValue;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
-import java.io.IOException;
-import java.text.ParseException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
@@ -13,7 +15,7 @@ import java.util.ArrayList;
  */
 public class DepartamentoControl {
 
-    public static String listar(int id) throws ParseException, IOException {
+    public static String listar(int id) throws Exception {
         DepartamentoValue departamento = new DepartamentoValue(id, null);
         ArrayList<DepartamentoValue> departamentos = DepartamentoModel.lista(departamento);
 
@@ -23,34 +25,68 @@ public class DepartamentoControl {
         return departamentosJson;
     }
 
-    public static void excluir(int id) throws ParseException, IOException {
+    public static void excluir(int id) throws SalfException, Exception {
         DepartamentoValue departamento = new DepartamentoValue(id, null);
-        
-        DepartamentoModel.executaUpdate(
-                "  delete from departamento d\n"
-                + " where d.id_departamento = " + departamento.getId() + "\n"
-        );
+
+        try {
+            DefaultModel.executaUpdate(
+                    "  delete from departamento d\n"
+                    + " where d.id_departamento = " + departamento.getId() + "\n"
+            );
+        } catch (SQLException e) {
+            String sqlState = e.getSQLState();
+
+            if (sqlState.equals(SalfExceptionUtil.FOREIGN_KEY)) {
+                throw new SalfException("Não é possível excluir este departamento pois há professores que o referenciam.");
+            } else if (sqlState.equals(SalfExceptionUtil.NO_AFFECTED_ROWS)) {
+                throw new SalfException("Departamento não encontrado. Exclusão falhou.");
+            }
+
+            throw new Exception(e);
+        }
     }
 
-    public static void altera(int id, String json) throws ParseException, IOException {
+    public static void altera(int id, String json) throws SalfException, Exception {
         DepartamentoValue departamento = new DepartamentoValue(json);
         departamento.setId(id);
 
-        DepartamentoModel.executaUpdate(
-                "  update departamento\n"
-                + "   set descricao = '" + departamento.getDescricao() + "'\n"
-                + " where id_departamento = " + departamento.getId() + "\n"
-        );
+        try {
+            DefaultModel.executaUpdate(
+                    "  update departamento\n"
+                    + "   set descricao = '" + departamento.getDescricao() + "'\n"
+                    + " where id_departamento = " + departamento.getId() + "\n"
+            );
+        } catch (SQLException e) {
+            String sqlState = e.getSQLState();
+
+            if (sqlState.equals(SalfExceptionUtil.UNIQUE_KEY)) {
+                throw new SalfException("Já existe um departamento cadastrado com esta descrição.");
+            } else if (sqlState.equals(SalfExceptionUtil.NO_AFFECTED_ROWS)) {
+                throw new SalfException("Departamento não encontrado. Alteração falhou.");
+            }
+
+            throw new Exception(e);
+        }
     }
 
-    public static void cadastra(String json) throws ParseException, IOException {
+    public static void cadastra(String json) throws SalfException, Exception {
         DepartamentoValue departamento = new DepartamentoValue(json);
 
-        DepartamentoModel.executaUpdate(
-                "  insert into departamento\n"
-                + "       (descricao)\n"
-                + "values ('" + departamento.getDescricao() + "')\n"
-        );
+        try {
+            DefaultModel.executaUpdate(
+                    "  insert into departamento\n"
+                    + "       (descricao)\n"
+                    + "values ('" + departamento.getDescricao() + "')\n"
+            );
+        } catch (SQLException e) {
+            String sqlState = e.getSQLState();
+
+            if (sqlState.equals(SalfExceptionUtil.UNIQUE_KEY)) {
+                throw new SalfException("Já existe um departamento cadastrado com esta descrição.");
+            }
+
+            throw new Exception(e);
+        }
     }
 
 }

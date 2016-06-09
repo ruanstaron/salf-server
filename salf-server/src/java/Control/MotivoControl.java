@@ -1,5 +1,6 @@
 package Control;
 
+import Model.DefaultModel;
 import Model.MotivoModel;
 import Util.SalfException;
 import Util.SalfExceptionUtil;
@@ -28,7 +29,7 @@ public class MotivoControl {
         MotivoValue motivo = new MotivoValue(id, null);
 
         try {
-            MotivoModel.executaUpdate(
+            DefaultModel.executaUpdate(
                     "  delete from motivo m\n"
                     + " where m.id_motivo = " + motivo.getId() + "\n"
                     + "   and m.incidencia = false\n"
@@ -51,7 +52,7 @@ public class MotivoControl {
         motivo.setId(id);
 
         try {
-            MotivoModel.executaUpdate(
+            DefaultModel.executaUpdate(
                     "  update motivo\n"
                     + "   set descricao = '" + motivo.getDescricao() + "'\n"
                     + " where id_motivo = " + motivo.getId() + "\n"
@@ -74,7 +75,7 @@ public class MotivoControl {
         MotivoValue motivo = new MotivoValue(json);
 
         try {
-            MotivoModel.executaUpdate(
+            DefaultModel.executaUpdate(
                     "  insert into motivo\n"
                     + "       (descricao, incidencia)\n"
                     + "values ('" + motivo.getDescricao() + "', false)\n"

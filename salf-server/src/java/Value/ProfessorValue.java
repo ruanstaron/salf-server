@@ -33,7 +33,7 @@ public class ProfessorValue {
         this.id_departamento = id_departamento;
     }
 
-    public ProfessorValue(String json) {
+    public ProfessorValue(String json) throws Exception {
         System.out.println("json " + json);
         this.id = -1;
         this.nome = null;
@@ -61,7 +61,8 @@ public class ProfessorValue {
                 this.id_departamento = node.get(ProfessorUtil.PAR_DEPARTAMENTO_ID).asInt();
             }
         } catch (Exception e) {
-            System.out.println("Exceção: " + e);
+            System.out.println("Exceção ao interpretar professor: " + e.getMessage());
+            throw e;
         }
     }
 
