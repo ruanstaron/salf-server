@@ -22,7 +22,7 @@ public class MotivoValue {
         this.descricao = descricao;
     }
 
-    public MotivoValue(String json) {
+    public MotivoValue(String json) throws Exception {
         System.out.println("json " + json);
         this.id = -1;
         this.descricao = null;
@@ -38,7 +38,8 @@ public class MotivoValue {
                 this.descricao = node.get(ProfessorUtil.PAR_DESCRICAO).asText();
             }
         } catch (Exception e) {
-            System.out.println("Exceção: " + e);
+            System.out.println("Exceção ao interpretar motivo: " + e.getMessage());
+            throw e;
         }
     }
     

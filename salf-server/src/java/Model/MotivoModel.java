@@ -1,28 +1,28 @@
 package Model;
 
+import Util.SalfException;
+import Util.SalfExceptionUtil;
 import Value.MotivoValue;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * @author Ruan
  */
 public class MotivoModel {
 
-    public static ArrayList<MotivoValue> lista(MotivoValue motivo) {
+    public static ArrayList<MotivoValue> lista(MotivoValue motivo) throws Exception {
         String sql = "select m.*\n"
                 + "     from motivo m\n"
                 + "    where m.incidencia = false\n";
-        if(motivo.getId() != -1) {
+        if (motivo.getId() != -1) {
             sql += "     and m.id_motivo = " + motivo.getId() + "\n";
         }
         sql += "       order by m.id_motivo\n";
         System.out.println("Sql de lista: \n" + sql);
-        
+
         ArrayList<MotivoValue> lista = new ArrayList<>();
         MotivoValue motivoAux;
 
@@ -44,16 +44,17 @@ public class MotivoModel {
                 lista.add(motivoAux);
             }
             conn.close();
-        } catch (ClassNotFoundException | SQLException ex) {
-            Logger.getLogger(MotivoModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception e) {
+            System.out.println("Exceção ao listar motivos: " + e.getMessage());
+            throw e;
         }
-        
+
         return lista;
     }
-    
-    public static void executaUpdate(String sql) {
+
+    public static void executaUpdate(String sql) throws SalfException, SQLException, Exception {
         System.out.println("Sql de update: \n" + sql);
-        
+
         try {
             //Registra o driver
             Class.forName("org.postgresql.Driver");
@@ -63,10 +64,22 @@ public class MotivoModel {
             //Executa a query
             java.sql.Statement st = conn.createStatement();
             st.executeUpdate(sql);
+            if (st.getUpdateCount() == 0) {
+                throw new SQLException("No updates were done.", SalfExceptionUtil.NO_AFFECTED_ROWS);
+            }
             conn.close();
-        } catch (ClassNotFoundException | SQLException ex) {
-            Logger.getLogger(MotivoModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            String sqlState = ex.getSQLState();
+            System.out.println("Exceção: " + ex.getSQLState() + ", " + ex);
+
+            if (SalfExceptionUtil.tratavel(sqlState)) {
+                throw ex;
+            }
+
+            throw new Exception(ex);
+        } catch (Exception e) {
+            throw e;
         }
     }
-    
+
 }
