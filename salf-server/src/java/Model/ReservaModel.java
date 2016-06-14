@@ -14,7 +14,7 @@ public class ReservaModel {
         String sql = "select id_reserva\n"
                 + "        , id_sala\n"
                 + "        , data\n"
-                + "        , hora\n"
+                + "        , id_horario\n"
                 + "        , id_motivo\n"
                 + "     from reserva \n";
         if (reserva.getId() != -1) {
@@ -41,7 +41,7 @@ public class ReservaModel {
                         rs.getInt("id_reserva"),
                         rs.getInt("id_sala"),
                         rs.getString("data"),
-                        rs.getString("hora"),
+                        rs.getInt("id_horario"),
                         rs.getInt("id_motivo")
                 );
                 lista.add(reservaAux);

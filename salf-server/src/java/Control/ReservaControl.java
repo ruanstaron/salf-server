@@ -21,9 +21,9 @@ public class ReservaControl {
         try {
             DefaultModel.executaUpdate(
                     "  insert into reserva\n"
-                    + "       (id_sala, id_usuario, data, hora, id_motivo)\n"
+                    + "       (id_sala, id_usuario, data, id_horario, id_motivo)\n"
                     + "values ('" + reserva.getSala() + "', '" + reserva.getId_usuario() + "', "
-                    + "'" + reserva.getData() + "', '" + reserva.getHora() + "', "
+                    + "'" + reserva.getData() + "', " + reserva.getId_horario() + ", "
                     + "'" + reserva.getMotivo() + "')\n"
             );
         } catch (SQLException e) {
@@ -46,7 +46,7 @@ public class ReservaControl {
                     "  update reserva\n"
                     + "   set id_sala = '" + reserva.getSala() + "'\n"
                     + "     , data = '" + reserva.getData() + "'\n"
-                    + "     , hora = '" + reserva.getHora() + "'\n"
+                    + "     , id_horario = " + reserva.getId_horario() + "\n"
                     + "     , id_motivo = " + reserva.getMotivo() + "\n"
                     + " where id_reserva = " + reserva.getId() + "\n"
             );

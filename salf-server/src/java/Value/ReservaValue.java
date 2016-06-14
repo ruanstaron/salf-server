@@ -13,26 +13,26 @@ public class ReservaValue {
     private int sala;
     private int id_usuario;
     private String data;
-    private String hora;
+    private int id_horario;
     private int motivo;
 
     public ReservaValue(int id_reserva) {
         this.id = id_reserva;
     }
     
-    public ReservaValue(int id_reserva, int sala, String data, String hora, int motivo) {
+    public ReservaValue(int id_reserva, int sala, String data, int id_horario, int motivo) {
         this.id = id_reserva;
         this.sala = sala;
         this.data = data;
-        this.hora = hora;
+        this.id_horario = id_horario;
         this.motivo = motivo;
         this.id_usuario = 1;
     }
 
-    public ReservaValue(int sala, String data, String hora, int motivo) {
+    public ReservaValue(int sala, String data, int id_horario, int motivo) {
         this.sala = sala;
         this.data = data;
-        this.hora = hora;
+        this.id_horario = id_horario;
         this.motivo = motivo;
         this.id_usuario = 1;
     }
@@ -69,12 +69,12 @@ public class ReservaValue {
         this.data = data;
     }
 
-    public String getHora() {
-        return hora;
+    public int getId_horario() {
+        return id_horario;
     }
 
-    public void setHora(String hora) {
-        this.hora = hora;
+    public void setId_horario(int id_horario) {
+        this.id_horario = id_horario;
     }
 
     public int getMotivo() {
@@ -90,9 +90,9 @@ public class ReservaValue {
         this.id = -1;
         this.sala = -1;
         this.data = null;
-        this.hora = null;
+        this.id_horario = -1;
         this.motivo = -1;
-        this.id_usuario = 1;
+        this.id_usuario = 4;
             
         try {
             ObjectMapper om = new ObjectMapper();
@@ -111,7 +111,7 @@ public class ReservaValue {
                 this.data = node.get(ReservaUtil.PAR_DATA).asText();
             }
             if (node.has(ReservaUtil.PAR_HORA)) {
-                this.hora = node.get(ReservaUtil.PAR_HORA).asText();
+                this.id_horario = node.get(ReservaUtil.PAR_HORA).asInt();
             }
         } catch (Exception e) {
             System.out.println("Exceção ao interpretar reserva: " + e.getMessage());
@@ -122,6 +122,6 @@ public class ReservaValue {
     @Override
     public String toString() {
         return "Reserva [id=" + id + ", sala=" + sala + ", data=" + data + 
-                ", hora=" + hora + ", motivo="+ motivo + "]";
+                ", hora=" + id_horario + ", motivo="+ motivo + "]";
     }
 }
