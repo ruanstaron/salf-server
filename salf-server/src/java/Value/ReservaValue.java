@@ -92,7 +92,7 @@ public class ReservaValue {
         this.data = null;
         this.id_horario = -1;
         this.motivo = -1;
-        this.id_usuario = 4;
+        this.id_usuario = 1;
             
         try {
             ObjectMapper om = new ObjectMapper();
