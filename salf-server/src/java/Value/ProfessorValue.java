@@ -14,6 +14,7 @@ public class ProfessorValue {
     private String senha;
     private String email;
     private int id_departamento;
+    public boolean adm = false;
     
     private String departamento;
 

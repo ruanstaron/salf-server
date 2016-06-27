@@ -2,15 +2,12 @@ package salf_server;
 
 import Control.DepartamentoControl;
 import Control.IncidenciaControl;
-import Control.LoginControl;
+import static Control.LoginControl.checaLogin;
 import Control.MotivoControl;
 import Control.ProfessorControl;
 import Control.ReservaControl;
 import Control.SalaControl;
 import Util.SalfExceptionUtil;
-import com.nimbusds.jose.JOSEException;
-import java.io.IOException;
-import java.sql.SQLException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Produces;
@@ -21,6 +18,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
@@ -46,20 +44,25 @@ public class Salf_server {
         ResponseBuilder rb = req
                 .header("Access-Control-Allow-Origin", "*")
                 .header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
-                .header("Access-Control-Allow-Headers", "X-Requested-With, Content-Type, X-Codingpedia");;
+                .header("Access-Control-Allow-Headers", "X-Requested-With, Content-Type, X-Codingpedia");
         return rb.build();
     }
 
     @POST
     @Path("/login")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public String efetuaLogin(String data) throws IOException, SQLException, JOSEException {
-        if (LoginControl.realizaLogin(data)) {
-            Token token = new Token();
-            String s = token.geraToken(LoginControl.getId_usuario(data));
-            return LoginControl.geraLogin(s);
-        } else {
-            return null;
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response efetuaLogin(@HeaderParam("user") String user, @HeaderParam("password") String password) {
+        try {
+            boolean adm = checaLogin(user, password);
+            return makeCors(Response.ok().entity(
+                    "{\"adm\": " + (adm ? "true" : "false") + "}"
+            ));
+        } catch(Exception e) {
+            return makeCors(Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity(SalfExceptionUtil.toJson(e.getMessage()
+                            .replace(Character.toChars(10)[0], ' ')
+                            .replace("\"", "\'")
+                    )));
         }
     }
 
@@ -80,41 +83,55 @@ public class Salf_server {
     @GET
     @Path("/motivo")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response listaMotivos() {
+    public Response listaMotivos(@HeaderParam("user") String user, @HeaderParam("password") String password) {
         try {
+            checaLogin(user, password);
             return makeCors(Response.ok().entity(
                     MotivoControl.listar(-1)
             ));
         } catch (Exception e) {
             return makeCors(Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity(SalfExceptionUtil.toJson(e.getMessage())));
+                    .entity(SalfExceptionUtil.toJson(e.getMessage()
+                            .replace(Character.toChars(10)[0], ' ')
+                            .replace("\"", "\'")
+                    )));
         }
     }
 
     @GET
     @Path("/motivo/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response listaMotivos(@PathParam("id") int id) {
+    public Response listaMotivos(@HeaderParam("user") String user, @HeaderParam("password") String password, 
+            @PathParam("id") int id) {
         try {
+            checaLogin(user, password);
             return makeCors(Response.ok().entity(
                     MotivoControl.listar(id)
             ));
         } catch (Exception e) {
             return makeCors(Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity(SalfExceptionUtil.toJson(e.getMessage())));
+                    .entity(SalfExceptionUtil.toJson(e.getMessage()
+                            .replace(Character.toChars(10)[0], ' ')
+                            .replace("\"", "\'")
+                    )));
         }
     }
 
     @DELETE
     @Path("/motivo/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response excluiMotivo(@PathParam("id") int id) {
+    public Response excluiMotivo(@HeaderParam("user") String user, @HeaderParam("password") String password, 
+            @PathParam("id") int id) {
         try {
+            checaLogin(user, password, true);
             MotivoControl.excluir(id);
             return makeCors(Response.ok());
         } catch (Exception e) {
             return makeCors(Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity(SalfExceptionUtil.toJson(e.getMessage())));
+                    .entity(SalfExceptionUtil.toJson(e.getMessage()
+                            .replace(Character.toChars(10)[0], ' ')
+                            .replace("\"", "\'")
+                    )));
         }
     }
 
@@ -122,13 +139,18 @@ public class Salf_server {
     @Path("/motivo/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response alteraMotivo(@PathParam("id") int id, String data) {
+    public Response alteraMotivo(@HeaderParam("user") String user, @HeaderParam("password") String password, 
+            @PathParam("id") int id, String data) {
         try {
+            checaLogin(user, password);
             MotivoControl.altera(id, data);
             return makeCors(Response.ok());
         } catch (Exception e) {
             return makeCors(Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity(SalfExceptionUtil.toJson(e.getMessage())));
+                    .entity(SalfExceptionUtil.toJson(e.getMessage()
+                            .replace(Character.toChars(10)[0], ' ')
+                            .replace("\"", "\'")
+                    )));
         }
     }
 
@@ -136,13 +158,18 @@ public class Salf_server {
     @Path("/motivo")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response cadastraMotivo(String data) {
+    public Response cadastraMotivo(@HeaderParam("user") String user, @HeaderParam("password") String password, 
+            String data) {
         try {
+            checaLogin(user, password);
             MotivoControl.cadastra(data);
             return makeCors(Response.ok());
         } catch (Exception e) {
             return makeCors(Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity(SalfExceptionUtil.toJson(e.getMessage())));
+                    .entity(SalfExceptionUtil.toJson(e.getMessage()
+                            .replace(Character.toChars(10)[0], ' ')
+                            .replace("\"", "\'")
+                    )));
         }
     }
 
@@ -152,41 +179,55 @@ public class Salf_server {
     @GET
     @Path("/sala")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response listaSalas() {
+    public Response listaSalas(@HeaderParam("user") String user, @HeaderParam("password") String password) {
         try {
+            checaLogin(user, password);
             return makeCors(Response.ok().entity(
                     SalaControl.listar(-1)
             ));
         } catch (Exception e) {
             return makeCors(Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity(SalfExceptionUtil.toJson(e.getMessage())));
+                    .entity(SalfExceptionUtil.toJson(e.getMessage()
+                            .replace(Character.toChars(10)[0], ' ')
+                            .replace("\"", "\'")
+                    )));
         }
     }
 
     @GET
     @Path("/sala/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response listaSalas(@PathParam("id") int id) {
+    public Response listaSalas(@HeaderParam("user") String user, @HeaderParam("password") String password, 
+            @PathParam("id") int id) {
         try {
+            checaLogin(user, password);
             return makeCors(Response.ok().entity(
                     SalaControl.listar(id)
             ));
         } catch (Exception e) {
             return makeCors(Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity(SalfExceptionUtil.toJson(e.getMessage())));
+                    .entity(SalfExceptionUtil.toJson(e.getMessage()
+                            .replace(Character.toChars(10)[0], ' ')
+                            .replace("\"", "\'")
+                    )));
         }
     }
 
     @DELETE
     @Path("/sala/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response excluiSala(@PathParam("id") int id) {
+    public Response excluiSala(@HeaderParam("user") String user, @HeaderParam("password") String password, 
+            @PathParam("id") int id) {
         try {
+            checaLogin(user, password, true);
             SalaControl.excluir(id);
             return makeCors(Response.ok());
         } catch (Exception e) {
             return makeCors(Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity(SalfExceptionUtil.toJson(e.getMessage())));
+                    .entity(SalfExceptionUtil.toJson(e.getMessage()
+                            .replace(Character.toChars(10)[0], ' ')
+                            .replace("\"", "\'")
+                    )));
         }
     }
 
@@ -194,13 +235,18 @@ public class Salf_server {
     @Path("/sala")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response cadastraSala(String json) {
+    public Response cadastraSala(@HeaderParam("user") String user, @HeaderParam("password") String password, 
+            String json) {
         try {
+            checaLogin(user, password, true);
             SalaControl.cadastra(json);
             return makeCors(Response.ok());
         } catch (Exception e) {
             return makeCors(Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity(SalfExceptionUtil.toJson(e.getMessage())));
+                    .entity(SalfExceptionUtil.toJson(e.getMessage()
+                            .replace(Character.toChars(10)[0], ' ')
+                            .replace("\"", "\'")
+                    )));
         }
     }
 
@@ -208,13 +254,18 @@ public class Salf_server {
     @Path("/sala/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response alteraSala(@PathParam("id") int id, String json) {
+    public Response alteraSala(@HeaderParam("user") String user, @HeaderParam("password") String password, 
+            @PathParam("id") int id, String json) {
         try {
+            checaLogin(user, password, true);
             SalaControl.altera(id, json);
             return makeCors(Response.ok());
         } catch (Exception e) {
             return makeCors(Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity(SalfExceptionUtil.toJson(e.getMessage())));
+                    .entity(SalfExceptionUtil.toJson(e.getMessage()
+                            .replace(Character.toChars(10)[0], ' ')
+                            .replace("\"", "\'")
+                    )));
         }
     }
 
@@ -224,41 +275,55 @@ public class Salf_server {
     @GET
     @Path("/departamento")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response listaDepartamentos() {
+    public Response listaDepartamentos(@HeaderParam("user") String user, @HeaderParam("password") String password) {
         try {
+            checaLogin(user, password);
             return makeCors(Response.ok().entity(
                     DepartamentoControl.listar(-1)
             ));
         } catch (Exception e) {
             return makeCors(Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity(SalfExceptionUtil.toJson(e.getMessage())));
+                    .entity(SalfExceptionUtil.toJson(e.getMessage()
+                            .replace(Character.toChars(10)[0], ' ')
+                            .replace("\"", "\'")
+                    )));
         }
     }
 
     @GET
     @Path("/departamento/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response listaDepartamentos(@PathParam("id") int id) {
+    public Response listaDepartamentos(@HeaderParam("user") String user, @HeaderParam("password") String password, 
+            @PathParam("id") int id) {
         try {
+            checaLogin(user, password);
             return makeCors(Response.ok().entity(
                     DepartamentoControl.listar(id)
             ));
         } catch (Exception e) {
             return makeCors(Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity(SalfExceptionUtil.toJson(e.getMessage())));
+                    .entity(SalfExceptionUtil.toJson(e.getMessage()
+                            .replace(Character.toChars(10)[0], ' ')
+                            .replace("\"", "\'")
+                    )));
         }
     }
 
     @DELETE
     @Path("/departamento/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response excluiDepartamento(@PathParam("id") int id) {
+    public Response excluiDepartamento(@HeaderParam("user") String user, @HeaderParam("password") String password, 
+            @PathParam("id") int id) {
         try {
+            checaLogin(user, password, true);
             DepartamentoControl.excluir(id);
             return makeCors(Response.ok());
         } catch (Exception e) {
             return makeCors(Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity(SalfExceptionUtil.toJson(e.getMessage())));
+                    .entity(SalfExceptionUtil.toJson(e.getMessage()
+                            .replace(Character.toChars(10)[0], ' ')
+                            .replace("\"", "\'")
+                    )));
         }
     }
 
@@ -266,13 +331,18 @@ public class Salf_server {
     @Path("/departamento")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response cadastraDepartamento(String json) {
+    public Response cadastraDepartamento(@HeaderParam("user") String user, @HeaderParam("password") String password, 
+            String json) {
         try {
+            checaLogin(user, password, true);
             DepartamentoControl.cadastra(json);
             return makeCors(Response.ok());
         } catch (Exception e) {
             return makeCors(Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity(SalfExceptionUtil.toJson(e.getMessage())));
+                    .entity(SalfExceptionUtil.toJson(e.getMessage()
+                            .replace(Character.toChars(10)[0], ' ')
+                            .replace("\"", "\'")
+                    )));
         }
     }
 
@@ -280,13 +350,18 @@ public class Salf_server {
     @Path("/departamento/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response alteraDepartamento(@PathParam("id") int id, String json) {
+    public Response alteraDepartamento(@HeaderParam("user") String user, @HeaderParam("password") String password, 
+            @PathParam("id") int id, String json) {
         try {
+            checaLogin(user, password, true);
             DepartamentoControl.altera(id, json);
             return makeCors(Response.ok());
         } catch (Exception e) {
             return makeCors(Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity(SalfExceptionUtil.toJson(e.getMessage())));
+                    .entity(SalfExceptionUtil.toJson(e.getMessage()
+                            .replace(Character.toChars(10)[0], ' ')
+                            .replace("\"", "\'")
+                    )));
         }
     }
 
@@ -296,41 +371,55 @@ public class Salf_server {
     @GET
     @Path("/professor")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response listaProfessores() {
+    public Response listaProfessores(@HeaderParam("user") String user, @HeaderParam("password") String password) {
         try {
+            checaLogin(user, password, true);
             return makeCors(Response.ok().entity(
                     ProfessorControl.listar(-1)
             ));
         } catch (Exception e) {
             return makeCors(Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity(SalfExceptionUtil.toJson(e.getMessage())));
+                    .entity(SalfExceptionUtil.toJson(e.getMessage()
+                            .replace(Character.toChars(10)[0], ' ')
+                            .replace("\"", "\'")
+                    )));
         }
     }
 
     @GET
     @Path("/professor/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response listaProfessores(@PathParam("id") int id) {
+    public Response listaProfessores(@HeaderParam("user") String user, @HeaderParam("password") String password, 
+            @PathParam("id") int id) {
         try {
+            checaLogin(user, password, true);
             return makeCors(Response.ok().entity(
                     ProfessorControl.listar(id)
             ));
         } catch (Exception e) {
             return makeCors(Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity(SalfExceptionUtil.toJson(e.getMessage())));
+                    .entity(SalfExceptionUtil.toJson(e.getMessage()
+                            .replace(Character.toChars(10)[0], ' ')
+                            .replace("\"", "\'")
+                    )));
         }
     }
 
     @DELETE
     @Path("/professor/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response excluiProfessor(@PathParam("id") int id) {
+    public Response excluiProfessor(@HeaderParam("user") String user, @HeaderParam("password") String password, 
+            @PathParam("id") int id) {
         try {
+            checaLogin(user, password, true);
             ProfessorControl.excluir(id);
             return makeCors(Response.ok());
         } catch (Exception e) {
             return makeCors(Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity(SalfExceptionUtil.toJson(e.getMessage())));
+                    .entity(SalfExceptionUtil.toJson(e.getMessage()
+                            .replace(Character.toChars(10)[0], ' ')
+                            .replace("\"", "\'")
+                    )));
         }
     }
 
@@ -338,13 +427,18 @@ public class Salf_server {
     @Path("/professor")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response cadastraProfessor(String json) {
+    public Response cadastraProfessor(@HeaderParam("user") String user, @HeaderParam("password") String password, 
+            String json) {
         try {
+            checaLogin(user, password, true);
             ProfessorControl.cadastra(json);
             return makeCors(Response.ok());
         } catch (Exception e) {
             return makeCors(Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity(SalfExceptionUtil.toJson(e.getMessage())));
+                    .entity(SalfExceptionUtil.toJson(e.getMessage()
+                            .replace(Character.toChars(10)[0], ' ')
+                            .replace("\"", "\'")
+                    )));
         }
     }
 
@@ -352,13 +446,18 @@ public class Salf_server {
     @Path("/professor/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response alteraProfessor(@PathParam("id") int id, String json) {
+    public Response alteraProfessor(@HeaderParam("user") String user, @HeaderParam("password") String password, 
+            @PathParam("id") int id, String json) {
         try {
+            checaLogin(user, password, true);
             ProfessorControl.altera(id, json);
             return makeCors(Response.ok());
         } catch (Exception e) {
             return makeCors(Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity(SalfExceptionUtil.toJson(e.getMessage())));
+                    .entity(SalfExceptionUtil.toJson(e.getMessage()
+                            .replace(Character.toChars(10)[0], ' ')
+                            .replace("\"", "\'")
+                    )));
         }
     }
 
@@ -368,41 +467,55 @@ public class Salf_server {
     @GET
     @Path("/incidencia")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response listaIncidencias() {
+    public Response listaIncidencias(@HeaderParam("user") String user, @HeaderParam("password") String password) {
         try {
+            checaLogin(user, password, true);
             return makeCors(Response.ok().entity(
                     IncidenciaControl.listar(-1)
             ));
         } catch (Exception e) {
             return makeCors(Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity(SalfExceptionUtil.toJson(e.getMessage())));
+                    .entity(SalfExceptionUtil.toJson(e.getMessage()
+                            .replace(Character.toChars(10)[0], ' ')
+                            .replace("\"", "\'")
+                    )));
         }
     }
 
     @GET
     @Path("/incidencia/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response listaIncidencias(@PathParam("id") int id) {
+    public Response listaIncidencias(@HeaderParam("user") String user, @HeaderParam("password") String password, 
+            @PathParam("id") int id) {
         try {
+            checaLogin(user, password, true);
             return makeCors(Response.ok().entity(
                     IncidenciaControl.listar(id)
             ));
         } catch (Exception e) {
             return makeCors(Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity(SalfExceptionUtil.toJson(e.getMessage())));
+                    .entity(SalfExceptionUtil.toJson(e.getMessage()
+                            .replace(Character.toChars(10)[0], ' ')
+                            .replace("\"", "\'")
+                    )));
         }
     }
 
     @DELETE
     @Path("/incidencia/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response excluiIncidencia(@PathParam("id") int id) {
+    public Response excluiIncidencia(@HeaderParam("user") String user, @HeaderParam("password") String password, 
+            @PathParam("id") int id) {
         try {
+            checaLogin(user, password, true);
             IncidenciaControl.excluir(id);
             return makeCors(Response.ok());
         } catch (Exception e) {
             return makeCors(Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity(SalfExceptionUtil.toJson(e.getMessage())));
+                    .entity(SalfExceptionUtil.toJson(e.getMessage()
+                            .replace(Character.toChars(10)[0], ' ')
+                            .replace("\"", "\'")
+                    )));
         }
     }
 
@@ -410,13 +523,18 @@ public class Salf_server {
     @Path("/incidencia/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response alteraIncidencia(@PathParam("id") int id, String data) {
+    public Response alteraIncidencia(@HeaderParam("user") String user, @HeaderParam("password") String password, 
+            @PathParam("id") int id, String data) {
         try {
+            checaLogin(user, password, true);
             IncidenciaControl.altera(id, data);
             return makeCors(Response.ok());
         } catch (Exception e) {
             return makeCors(Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity(SalfExceptionUtil.toJson(e.getMessage())));
+                    .entity(SalfExceptionUtil.toJson(e.getMessage()
+                            .replace(Character.toChars(10)[0], ' ')
+                            .replace("\"", "\'")
+                    )));
         }
     }
 
@@ -424,13 +542,18 @@ public class Salf_server {
     @Path("/incidencia")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response cadastraIncidencia(String data) {
+    public Response cadastraIncidencia(@HeaderParam("user") String user, @HeaderParam("password") String password, 
+            String data) {
         try {
+            checaLogin(user, password, true);
             IncidenciaControl.cadastra(data);
             return makeCors(Response.ok());
         } catch (Exception e) {
             return makeCors(Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity(SalfExceptionUtil.toJson(e.getMessage())));
+                    .entity(SalfExceptionUtil.toJson(e.getMessage()
+                            .replace(Character.toChars(10)[0], ' ')
+                            .replace("\"", "\'")
+                    )));
         }
     }
 
@@ -441,13 +564,18 @@ public class Salf_server {
     @Path("/reserva")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response cadastraReserva(String json) {
+    public Response cadastraReserva(@HeaderParam("user") String user, @HeaderParam("password") String password, 
+            String json) {
         try {
+            checaLogin(user, password);
             ReservaControl.cadastra(json);
             return makeCors(Response.ok());
         } catch (Exception e) {
             return makeCors(Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity(SalfExceptionUtil.toJson(e.getMessage())));
+                    .entity(SalfExceptionUtil.toJson(e.getMessage()
+                            .replace(Character.toChars(10)[0], ' ')
+                            .replace("\"", "\'")
+                    )));
         }
     }
 
@@ -455,54 +583,73 @@ public class Salf_server {
     @Path("/reserva/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response alteraReserva(@PathParam("id") int id, String data) {
+    public Response alteraReserva(@HeaderParam("user") String user, @HeaderParam("password") String password, 
+            @PathParam("id") int id, String data) {
         try {
+            checaLogin(user, password);
             ReservaControl.altera(id, data);
             return makeCors(Response.ok());
         } catch (Exception e) {
             return makeCors(Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity(SalfExceptionUtil.toJson(e.getMessage())));
+                    .entity(SalfExceptionUtil.toJson(e.getMessage()
+                            .replace(Character.toChars(10)[0], ' ')
+                            .replace("\"", "\'")
+                    )));
         }
     }
 
     @DELETE
     @Path("/reserva/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response excluiReserva(@PathParam("id") int id) {
+    public Response excluiReserva(@HeaderParam("user") String user, @HeaderParam("password") String password, 
+            @PathParam("id") int id) {
         try {
+            checaLogin(user, password);
             ReservaControl.excluir(id);
             return makeCors(Response.ok());
         } catch (Exception e) {
             return makeCors(Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity(SalfExceptionUtil.toJson(e.getMessage())));
+                    .entity(SalfExceptionUtil.toJson(e.getMessage()
+                            .replace(Character.toChars(10)[0], ' ')
+                            .replace("\"", "\'")
+                    )));
         }
     }
 
     @GET
     @Path("/reserva")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response listaReserva() {
+    public Response listaReserva(@HeaderParam("user") String user, @HeaderParam("password") String password) {
         try {
+            checaLogin(user, password);
             return makeCors(Response.ok().entity(
                     ReservaControl.listar(-1)
             ));
         } catch (Exception e) {
             return makeCors(Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity(SalfExceptionUtil.toJson(e.getMessage())));
+                    .entity(SalfExceptionUtil.toJson(e.getMessage()
+                            .replace(Character.toChars(10)[0], ' ')
+                            .replace("\"", "\'")
+                    )));
         }
     }
 
     @GET
     @Path("/reserva/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response listaReserva(@PathParam("id") int id) {
+    public Response listaReserva(@HeaderParam("user") String user, @HeaderParam("password") String password, 
+            @PathParam("id") int id) {
         try {
+            checaLogin(user, password);
             return makeCors(Response.ok().entity(
                     ReservaControl.listar(id)
             ));
         } catch (Exception e) {
             return makeCors(Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity(SalfExceptionUtil.toJson(e.getMessage())));
+                    .entity(SalfExceptionUtil.toJson(e.getMessage()
+                            .replace(Character.toChars(10)[0], ' ')
+                            .replace("\"", "\'")
+                    )));
         }
     }
 
