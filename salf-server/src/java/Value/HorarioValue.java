@@ -5,24 +5,24 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
- * @author cristhian
+ * @author Ruan
  */
-public class SalaValue {
+public class HorarioValue {
 
     private int id;
     private String descricao;
 
-    public SalaValue() {
+    public HorarioValue() {
         this.id = -1;
         this.descricao = null;
     }
 
-    public SalaValue(int id, String descricao) {
+    public HorarioValue(int id, String descricao) {
         this.id = id;
         this.descricao = descricao;
     }
 
-    public SalaValue(String json) throws Exception {
+    public HorarioValue(String json) throws Exception {
         System.out.println("json " + json);
         this.id = -1;
         this.descricao = null;
@@ -38,14 +38,14 @@ public class SalaValue {
                 this.descricao = node.get(ProfessorUtil.PAR_DESCRICAO).asText();
             }
         } catch (Exception e) {
-            System.out.println("Exceção ao interpretar sala: " + e.getMessage());
+            System.out.println("Exceção ao interpretar horário: " + e.getMessage());
             throw e;
         }
     }
 
     @Override
     public String toString() {
-        return "Sala [id=" + id + ", descricao=" + descricao + "]";
+        return "Horario [id=" + id + ", descricao=" + descricao + "]";
     }
 
     public int getId() {

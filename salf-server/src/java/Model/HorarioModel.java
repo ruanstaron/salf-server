@@ -1,26 +1,26 @@
 package Model;
 
-import Value.SalaValue;
+import Value.HorarioValue;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
 /**
- * @author cristhian
+ * @author Ruan
  */
-public class SalaModel {
+public class HorarioModel {
 
-    public static ArrayList<SalaValue> lista(SalaValue sala) throws Exception {
+    public static ArrayList<HorarioValue> lista(HorarioValue horario) throws Exception {
         String sql = "select s.*\n"
-                + "     from sala s\n";
-        if (sala.getId() != -1) {
-            sql += "   where s.id_sala = " + sala.getId() + "\n";
+                + "     from horarios s\n";
+        if (horario.getId() != -1) {
+            sql += "   where s.id_horario = " + horario.getId() + "\n";
         }
-        sql += "       order by s.id_sala\n";
+        sql += "       order by s.id_horario\n";
         System.out.println("Sql de lista: \n" + sql);
 
-        ArrayList<SalaValue> lista = new ArrayList<>();
-        SalaValue salaAux;
+        ArrayList<HorarioValue> lista = new ArrayList<>();
+        HorarioValue horarioAux;
 
         try {
             //Registra o driver
@@ -33,15 +33,15 @@ public class SalaModel {
             st.executeQuery(sql);
             ResultSet rs = st.getResultSet();
             while (rs.next()) {
-                salaAux = new SalaValue(
-                        rs.getInt("id_sala"),
+                horarioAux = new HorarioValue(
+                        rs.getInt("id_horario"),
                         rs.getString("descricao")
                 );
-                lista.add(salaAux);
+                lista.add(horarioAux);
             }
             conn.close();
         } catch (Exception e) {
-            System.out.println("Exceção ao listar motivos: " + e.getMessage());
+            System.out.println("Exceção ao listar horarios: " + e.getMessage());
             throw e;
         }
 

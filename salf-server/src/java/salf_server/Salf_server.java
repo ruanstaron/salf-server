@@ -1,6 +1,7 @@
 package salf_server;
 
 import Control.DepartamentoControl;
+import Control.HorarioControl;
 import Control.IncidenciaControl;
 import static Control.LoginControl.checaLogin;
 import Control.MotivoControl;
@@ -643,6 +644,47 @@ public class Salf_server {
             checaLogin(user, password);
             return makeCors(Response.ok().entity(
                     ReservaControl.listar(id)
+            ));
+        } catch (Exception e) {
+            return makeCors(Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity(SalfExceptionUtil.toJson(e.getMessage()
+                            .replace(Character.toChars(10)[0], ' ')
+                            .replace("\"", "\'")
+                    )));
+        }
+    }
+    
+    // ------- ------------ - -------
+    // MÉTODOS RELACIONADOS A HORÁRIO
+    // ------- ------------ - -------
+    
+    @GET
+    @Path("/horarios")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response listaHorarios(@HeaderParam("user") String user, @HeaderParam("password") String password) {
+        try {
+            checaLogin(user, password);
+            return makeCors(Response.ok().entity(
+                    HorarioControl.listar(-1)
+            ));
+        } catch (Exception e) {
+            return makeCors(Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity(SalfExceptionUtil.toJson(e.getMessage()
+                            .replace(Character.toChars(10)[0], ' ')
+                            .replace("\"", "\'")
+                    )));
+        }
+    }
+
+    @GET
+    @Path("/horarios/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response listaHorarios(@HeaderParam("user") String user, @HeaderParam("password") String password, 
+            @PathParam("id") int id) {
+        try {
+            checaLogin(user, password);
+            return makeCors(Response.ok().entity(
+                    HorarioControl.listar(id)
             ));
         } catch (Exception e) {
             return makeCors(Response.status(Response.Status.INTERNAL_SERVER_ERROR)

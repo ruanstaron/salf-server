@@ -41,7 +41,7 @@ public class SalaModel {
             }
             conn.close();
         } catch (Exception e) {
-            System.out.println("Exceção ao listar motivos: " + e.getMessage());
+            System.out.println("Exceção ao listar salas: " + e.getMessage());
             throw e;
         }
 

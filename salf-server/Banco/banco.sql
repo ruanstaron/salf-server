@@ -38,3 +38,13 @@ CREATE TABLE reserva (
 	data 				DATE NOT NULL,
 	id_motivo			INTEGER NOT NULL REFERENCES motivo(id_motivo)
 );
+
+--Views
+CREATE VIEW v_reserva AS
+	SELECT
+		r.id_reserva, s.descricao AS sala, h.descricao AS horario, TO_CHAR(r.data, 'DD-MM-YYYY') AS data, m.descricao AS motivo
+	FROM
+		reserva r JOIN sala s ON r.id_sala = s.id_sala
+		JOIN horarios h ON r.id_horario = h.id_horario
+		JOIN motivo m ON r.id_motivo = m.id_motivo
+	ORDER BY id_reserva
