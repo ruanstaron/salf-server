@@ -9,8 +9,8 @@ import java.util.ArrayList;
  */
 public class LoginControl {
     
-    private static final boolean IGNORA_VALIDACAO = false;
-    private static final boolean IGNORA_VALIDACAO_ADM = false;
+    private static final boolean IGNORA_VALIDACAO = true;
+    private static final boolean IGNORA_VALIDACAO_ADM = true;
     
     public static boolean checaLogin(String user, String password, boolean adm) throws Exception {
         if(IGNORA_VALIDACAO) return true;

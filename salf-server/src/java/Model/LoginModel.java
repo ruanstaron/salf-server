@@ -56,4 +56,33 @@ public class LoginModel {
         return lista;
     }
     
+    public static int getIdUser(String email) throws Exception{
+        int id_usuario = 0;
+        String sql = "select id_usuario\n"
+                + "     from usuario u\n"
+                + "    where email = '" + email + "'\n";
+        System.out.println("Sql de login: \n" + sql);
+        
+        try {
+            //Registra o driver
+            Class.forName("org.postgresql.Driver");
+            //Solicita uma conexao
+            Connection conn = ConnectionFactory.getConnection();
+
+            //Executa a query
+            java.sql.Statement st = conn.createStatement();
+            st.executeQuery(sql);
+            ResultSet rs = st.getResultSet();
+            while (rs.next()) {
+                id_usuario = rs.getInt("id_usuario");
+            }
+            conn.close();
+        } catch (Exception e) {
+            System.out.println("Exceção ao listar professores: " + e.getMessage());
+            throw e;
+        }
+        return id_usuario;
+        
+    }
+    
 }

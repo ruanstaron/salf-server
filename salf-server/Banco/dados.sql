@@ -7,6 +7,8 @@ INSERT INTO public.usuario(nome, senha, id_departamento, email, tipo)
 VALUES ('admin', 'admin', (select min(d.id_departamento) from departamento d), 'administracao@email.com', true);
 INSERT INTO public.usuario(nome, senha, id_departamento, email, tipo)
 VALUES ('user', 'user', (select max(d.id_departamento) from departamento d), 'usuario@email.com', false);
+INSERT INTO public.usuario(nome, senha, id_departamento, email, tipo)
+VALUES ('login', 'login', (select min(d.id_departamento) from departamento d), 'login@email.com', true);
 
 INSERT INTO public.motivo(descricao, incidencia) VALUES ('Aula', false);
 INSERT INTO public.motivo(descricao, incidencia) VALUES ('Indisponível', true);

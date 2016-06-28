@@ -278,7 +278,7 @@ public class Salf_server {
     @Produces(MediaType.APPLICATION_JSON)
     public Response listaDepartamentos(@HeaderParam("user") String user, @HeaderParam("password") String password) {
         try {
-            checaLogin(user, password);
+            //checaLogin(user, password);
             return makeCors(Response.ok().entity(
                     DepartamentoControl.listar(-1)
             ));
@@ -297,7 +297,7 @@ public class Salf_server {
     public Response listaDepartamentos(@HeaderParam("user") String user, @HeaderParam("password") String password, 
             @PathParam("id") int id) {
         try {
-            checaLogin(user, password);
+            //checaLogin(user, password);
             return makeCors(Response.ok().entity(
                     DepartamentoControl.listar(id)
             ));
@@ -569,7 +569,7 @@ public class Salf_server {
             String json) {
         try {
             checaLogin(user, password);
-            ReservaControl.cadastra(json);
+            ReservaControl.cadastra(json, user);
             return makeCors(Response.ok());
         } catch (Exception e) {
             return makeCors(Response.status(Response.Status.INTERNAL_SERVER_ERROR)

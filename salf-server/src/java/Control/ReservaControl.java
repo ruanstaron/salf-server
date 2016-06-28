@@ -1,6 +1,7 @@
 package Control;
 
 import Model.DefaultModel;
+import Model.LoginModel;
 import Model.ReservaModel;
 import Util.SalfException;
 import Util.SalfExceptionUtil;
@@ -15,14 +16,21 @@ import java.util.ArrayList;
  */
 public class ReservaControl {
 
-    public static void cadastra(String json) throws SalfException, Exception {
+    public static void cadastra(String json, String user) throws SalfException, Exception {
+        int usuario;
         ReservaValue reserva = new ReservaValue(json);
+        
+        if(user == null){
+            usuario = 3;
+        }else{
+            usuario = LoginModel.getIdUser(user);
+        }
 
         try {
             DefaultModel.executaUpdate(
                     "  insert into reserva\n"
                     + "       (id_sala, id_usuario, data, id_horario, id_motivo)\n"
-                    + "values ('" + reserva.getId_sala() + "', '" + reserva.getId_usuario() + "', "
+                    + "values ('" + reserva.getId_sala() + "', '" + usuario + "', "
                     + "'" + reserva.getData() + "', " + reserva.getId_horario() + ", "
                     + "'" + reserva.getId_motivo() + "')\n"
             );
