@@ -10,15 +10,19 @@ import java.util.ArrayList;
  */
 public class ReservaModel {
 
-    public static ArrayList<ReservaValue> lista(ReservaValue reserva) throws Exception {
+    public static ArrayList<ReservaValue> lista(ReservaValue reserva, int idUsuario) throws Exception {
         String sql = "select id_reserva\n"
                 + "        , sala\n"
                 + "        , data\n"
                 + "        , horario\n"
                 + "        , motivo\n"
-                + "     from v_reserva \n";
+                + "     from v_reserva \n"
+                + "    where 1 = 1\n";
         if (reserva.getId() != -1) {
-            sql += "     where id_reserva = " + reserva.getId() + "\n";
+            sql += "     and id_reserva = " + reserva.getId() + "\n";
+        }
+        if(idUsuario != -1) {
+            sql += "     and id_usuario = " + idUsuario + "\n";
         }
                 sql += " order by id_reserva\n";
         System.out.println("Sql de lista: \n" + sql);

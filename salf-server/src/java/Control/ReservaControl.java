@@ -2,6 +2,7 @@ package Control;
 
 import Model.DefaultModel;
 import Model.LoginModel;
+import Model.MotivoModel;
 import Model.ReservaModel;
 import Util.SalfException;
 import Util.SalfExceptionUtil;
@@ -99,9 +100,16 @@ public class ReservaControl {
         }
     }
 
-    public static String listar(int id) throws Exception {
+    public static String listar(int id, String user, boolean adm) throws Exception {
+        int idUsuario = -1;
+        if(!adm && user != null) {
+            idUsuario = LoginModel.getIdUser(user);
+        } else {
+            MotivoModel.bonus = 1;
+        }
+        
         ReservaValue reserva = new ReservaValue(id);
-        ArrayList<ReservaValue> reservas = ReservaModel.lista(reserva);
+        ArrayList<ReservaValue> reservas = ReservaModel.lista(reserva, idUsuario);
 
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
         String reservaJson = ow.writeValueAsString(reservas);

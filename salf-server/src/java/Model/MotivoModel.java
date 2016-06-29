@@ -9,11 +9,17 @@ import java.util.ArrayList;
  * @author Ruan
  */
 public class MotivoModel {
+    
+    public static int bonus = 0;
 
     public static ArrayList<MotivoValue> lista(MotivoValue motivo) throws Exception {
         String sql = "select m.*\n"
                 + "     from motivo m\n"
-                + "    where m.incidencia = false\n";
+                + "    where 1 = 1\n";
+        if (bonus == 0) {
+            sql += "     and m.incidencia = false\n";
+        }
+        bonus = 0;
         if (motivo.getId() != -1) {
             sql += "     and m.id_motivo = " + motivo.getId() + "\n";
         }

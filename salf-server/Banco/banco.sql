@@ -42,7 +42,8 @@ CREATE TABLE reserva (
 --Views
 CREATE VIEW v_reserva AS
 	SELECT
-		r.id_reserva, s.descricao AS sala, h.descricao AS horario, TO_CHAR(r.data, 'DD-MM-YYYY') AS data, m.descricao AS motivo
+		r.id_reserva, s.descricao AS sala, h.descricao AS horario, TO_CHAR(r.data, 'DD-MM-YYYY') AS data, m.descricao AS motivo,
+                r.id_usuario as id_usuario
 	FROM
 		reserva r JOIN sala s ON r.id_sala = s.id_sala
 		JOIN horarios h ON r.id_horario = h.id_horario
