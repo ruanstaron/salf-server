@@ -588,7 +588,7 @@ public class Salf_server {
             @PathParam("id") int id, String data) {
         try {
             checaLogin(user, password);
-            ReservaControl.altera(id, data);
+            ReservaControl.altera(id, data, user);
             return makeCors(Response.ok());
         } catch (Exception e) {
             return makeCors(Response.status(Response.Status.INTERNAL_SERVER_ERROR)

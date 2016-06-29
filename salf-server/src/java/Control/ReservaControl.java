@@ -45,7 +45,15 @@ public class ReservaControl {
         }
     }
 
-    public static void altera(int id, String json) throws SalfException, Exception {
+    public static void altera(int id, String json, String user) throws SalfException, Exception {
+        int usuario;
+               
+        if(user == null){
+            usuario = 3;
+        }else{
+            usuario = LoginModel.getIdUser(user);
+        }
+        
         ReservaValue reserva = new ReservaValue(json);
         reserva.setId(id);
 
@@ -53,6 +61,7 @@ public class ReservaControl {
             DefaultModel.executaUpdate(
                     "  update reserva\n"
                     + "   set id_sala = '" + reserva.getId_sala() + "'\n"
+                    + "     , id_usuario = '" + usuario + "'\n"
                     + "     , data = '" + reserva.getData() + "'\n"
                     + "     , id_horario = " + reserva.getId_horario() + "\n"
                     + "     , id_motivo = " + reserva.getId_motivo() + "\n"
