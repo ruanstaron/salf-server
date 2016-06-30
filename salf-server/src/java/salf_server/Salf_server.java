@@ -297,7 +297,7 @@ public class Salf_server {
     public Response listaDepartamentos(@HeaderParam("user") String user, @HeaderParam("password") String password, 
             @PathParam("id") int id) {
         try {
-            //checaLogin(user, password);
+            checaLogin(user, password);
             return makeCors(Response.ok().entity(
                     DepartamentoControl.listar(id)
             ));

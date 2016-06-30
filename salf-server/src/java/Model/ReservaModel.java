@@ -12,11 +12,11 @@ public class ReservaModel {
 
     public static ArrayList<ReservaValue> lista(ReservaValue reserva, int idUsuario) throws Exception {
         String sql = "select id_reserva\n"
-                + "        , sala\n"
+                + "        , id_sala\n"
                 + "        , data\n"
-                + "        , horario\n"
-                + "        , motivo\n"
-                + "     from v_reserva \n"
+                + "        , id_horario\n"
+                + "        , id_motivo\n"
+                + "     from reserva \n"
                 + "    where 1 = 1\n";
         if (reserva.getId() != -1) {
             sql += "     and id_reserva = " + reserva.getId() + "\n";
@@ -43,10 +43,10 @@ public class ReservaModel {
             while (rs.next()) {
                 reservaAux = new ReservaValue(
                         rs.getInt("id_reserva"),
-                        rs.getString("sala"),
+                        rs.getInt("id_sala"),
                         rs.getString("data"),
-                        rs.getString("horario"),
-                        rs.getString("motivo")
+                        rs.getInt("id_horario"),
+                        rs.getInt("id_motivo")
                 );
                 lista.add(reservaAux);
             }
